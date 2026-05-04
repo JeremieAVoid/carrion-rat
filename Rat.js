@@ -7,7 +7,7 @@ class Rat {
     gravity = 1500;
     velocityY = 0;
     onGround = false;
-    jumpForce = -1000;
+    jumpForce = -500;
 
     constructor(X, Y, height, width) {
         this.posX = X;
