@@ -44,6 +44,12 @@ function update(deltaTime) {
         player.setPosY(ground - player.getHeight());
         player.velocityY = 0;
     }
+    // Gestion du plafond
+    const ceiling = 20;
+    if (player.getPosY() <= ceiling) {
+        player.setPosY(ceiling);
+        player.velocityY = 0;
+    }
 
     // Mise à jour des obstacles
     for (let i = obstaclesTop.length - 1; i >= 0; i--) {
@@ -90,6 +96,10 @@ function draw() {
     // Sol
     ctx.fillStyle = "#a78484";
     ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+    //Plafond
+    ctx.fillStyle = "#a78484";
+    ctx.fillRect(0,0,canvas.width,20);
+
 
     // Rat
     ctx.drawImage(
