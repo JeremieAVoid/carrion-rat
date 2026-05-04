@@ -13,25 +13,31 @@ ratImg.onload = () => {
 };
 
 //rat
-const player = new Rat(100,canvas.height / 2,350,150);
+const ground = canvas.height - 20;
+const player = new Rat(100, ground - 150, 150, 150);
 
 //obstacle
 const obstacle = new Obstacle(canvas.width,canvas.height-150,150,50,300);
 
 window.addEventListener("keydown", (e) => {
     if (e.code === "Space") {
-        player.jump();
+        player.velocityY = player.jumpForce;
     }
+});
+
+window.addEventListener("mousedown", () => {
+  player.velocityY = player.jumpForce;
 });
 
 function update(deltaTime) {
     player.velocityY += player.getGravity() * deltaTime;
     player.y += player.velocityY * deltaTime;
     const ground = canvas.height - 20;
-        if (player.getPosY() + player.getHeight() > ground) {
-            player.setPosY(ground - player.getHeight());
-            player.velocityY = 0;
-        }
+    if (player.getPosY() + player.getHeight() > ground) {
+        player.setPosY(ground - player.getHeight());
+        player.velocityY = 0;
+        player.onGround = true;
+    }
     player.obstacle(obstacle);
     obstacle.shift(deltaTime);
     if (obstacle.getPosX() + obstacle.getWidth() < 0) {

@@ -43,20 +43,19 @@ class Rat {
 
     obstacle(obsta) {
         if (
-            this.posX < obsta.getPosX() + obsta.getWidth() &&
-            this.posX + this.width > obsta.getPosX() &&
-            this.posY < obsta.getPosY() + obsta.getHeight() &&
-            this.posY + this.height > obsta.getPosY()
+        this.posX < obsta.getPosX() + obsta.getWidth() &&
+        this.posX + this.width > obsta.getPosX() &&
+        this.posY < obsta.getPosY() + obsta.getHeight() &&
+        this.posY + this.height > obsta.getPosY()
         ) {
-        // collision → poser le rat dessus
-            this.posY = obsta.getPosY() - this.height;
-            this.velocityY = 0;
+            console.log("collision");
         }
     }
 
     jump(){
-        if (this.velocityY === 0) {
-            this.velocityY = -400;
+        if (this.onGround) {
+        this.velocityY = -400;
+        this.onGround = false;
         }
     }
 }
