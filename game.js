@@ -8,14 +8,21 @@ canvas.height = window.innerHeight;
 const ratImg = new Image();
 ratImg.src = "rat.png";
 
-ratImg.onload = () => {
-    console.log("Rat image loaded successfully.");
-};
+
+function gameLoop(timestamp) {
+    const deltaTime = 0.016;
+    update(deltaTime);
+    draw();
+    requestAnimationFrame(gameLoop);
+}
+
+ratImg.onload = () => requestAnimationFrame(gameLoop);
 
 //rat
 const player = new Rat(100,canvas.height / 2,350,150);
 const lev1 = new Level(1);
 const obstacles = lev1.game(canvas.width,canvas.height);
+
 
 window.addEventListener("keydown", (e) => {
     if (e.code === "Space") {
