@@ -13,15 +13,7 @@ ratImg.onload = () => {
 };
 
 //rat
-const player = {
-    x: 100,
-    y: canvas.height / 2,
-    width: 150,
-    height: 350,
-    velocityY: 0,
-    gravity: 800,
-    jumpForce: -350
-};
+const player = new Rat(100,canvas.height / 2,350,150)
 
 //obstacle
 
@@ -35,21 +27,22 @@ const obstacle = {
 
 window.addEventListener("keydown", (e) => {
     if (e.code === "Space") {
-        player.velocityY = player.jumpForce;
+        player.jump();
     }
 });
 
 function update(deltaTime) {
-    player.velocityY += player.gravity * deltaTime;
+    player.velocityY += player.getGravity() * deltaTime;
     player.y += player.velocityY * deltaTime;
-        if (player.y + player.height > canvas.height) {
-            player.y = canvas.height - player.height;
-            player.velocityY = 0;
-        }
+    if (player.getPosY() + player.getHeight() > canvas.height) {
+        player.setPosY(canvas.height - player.getHeight());
+        player.velocityY = 0;
+    }
+    player.obstacle(obstacle);
     obstacle.x -= obstacle.speed * deltaTime;
-        if (obstacle.x + obstacle.width < 0) {
-            obstacle.x = canvas.width;
-        }
+    if (obstacle.x + obstacle.width < 0) {
+        obstacle.x = canvas.width;
+    }
 }
 
 //partie graphique
@@ -59,19 +52,19 @@ function draw() {
     ctx.fillRect(0, 0, canvas.height - 20, canvas.width, 20);
 
     //sol
-  ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+    ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
 
-  // obstacle (os / intestin)
-  ctx.fillStyle = "#e8e2d0";
-  ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+    // obstacle (os / intestin)
+    ctx.fillStyle = "#e8e2d0";
+    ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
 
-  //rat
-  ctx.drawImage(
-    ratImg,
-    player.x,
-    player.y,
-    player.width,
-    player.height
-  );
+    //rat
+    ctx.drawImage(
+        ratImg,
+        player.x,
+        player.y,
+        player.width,
+        player.height
+    );
 }
 
