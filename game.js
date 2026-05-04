@@ -49,14 +49,14 @@ function draw() {
 
     // obstacle (os / intestin)
     ctx.fillStyle = "#e8e2d0";
-    ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+    ctx.fillRect(obstacle.getPosX(), obstacle.getPosY(), obstacle.getWidth(), obstacle.getHeight());
 
     //rat
     ctx.drawImage(
         ratImg,
-        player.x,
-        player.y,
-        player.width,
-        player.height
+        player.getPosX(),
+        player.getPosY(),
+        player.getWidth(),
+        player.getHeight()
     );
 }
