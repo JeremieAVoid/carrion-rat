@@ -11,6 +11,7 @@ class Obstacle{
         this.height = height;
         this.width = width;
         this.speed = speed;
+        this.passed = false;
     }
 
     getPosX(){
