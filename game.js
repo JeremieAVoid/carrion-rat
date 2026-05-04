@@ -38,3 +38,40 @@ window.addEventListener("keydown", (e) => {
         player.velocityY = player.jumpForce;
     }
 });
+
+function update(deltaTime) {
+    player.velocityY += player.gravity * deltaTime;
+    player.y += player.velocityY * deltaTime;
+        if (player.y + player.height > canvas.height) {
+            player.y = canvas.height - player.height;
+            player.velocityY = 0;
+        }
+    obstacle.x -= obstacle.speed * deltaTime;
+        if (obstacle.x + obstacle.width < 0) {
+            obstacle.x = canvas.width;
+        }
+}
+
+//partie graphique
+function draw() {
+    //fond
+    ctx.fillStyle = "#a78484";
+    ctx.fillRect(0, 0, canvas.height - 20, canvas.width, 20);
+
+    //sol
+  ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+
+  // obstacle (os / intestin)
+  ctx.fillStyle = "#e8e2d0";
+  ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+
+  //rat
+  ctx.drawImage(
+    ratImg,
+    player.x,
+    player.y,
+    player.width,
+    player.height
+  );
+}
+
