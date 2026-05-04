@@ -23,7 +23,7 @@ class Level {
         let obstacles = [];
         for (let i = 0; i < this.intensity * 5; i++) {
             const x = largeur + i * 400;
-            const y = 100;
+            const y = 20;
             const height = 100;
             const width = 50 + this.intensity * 10;
             const speed = 200 + this.intensity * 50;
