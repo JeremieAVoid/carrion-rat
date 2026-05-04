@@ -3,59 +3,36 @@ class Rat {
     posY;
     height;
     width;
-    weight = 100;//g
-    gravity = 9.81; //m/s
+    weight = 100;
+    gravity = 1500;
     velocityY = 0;
-    constructor(X,Y,height,width){
+    onGround = false;
+    jumpForce = -1000;
+
+    constructor(X, Y, height, width) {
         this.posX = X;
         this.posY = Y;
         this.height = height;
         this.width = width;
     }
 
-    getPosX(){
-        return this.posX;
-    }
-
-    getPosY(){
-        return this.posY;
-    }
-
-    setPosY(n){
-        this.posY = n;
-    }
-
-    getHeight(){
-        return this.height;
-    }
-
-    getWidth(){
-        return this.width;
-    }
-
-    getVelocityY(){
-        return this.velocityY;
-    }
-
-    getGravity(){
-        return 980; // pixels/s² (approx)
-    }
+    getPosX() { return this.posX; }
+    getPosY() { return this.posY; }
+    setPosY(n) { this.posY = n; }
+    getHeight() { return this.height; }
+    getWidth() { return this.width; }
+    getGravity() { return this.gravity; }
 
     obstacle(obsta) {
-        if (
-        this.posX < obsta.getPosX() + obsta.getWidth() &&
-        this.posX + this.width > obsta.getPosX() &&
-        this.posY < obsta.getPosY() + obsta.getHeight() &&
-        this.posY + this.height > obsta.getPosY()
-        ) {
-            console.log("collision");
-        }
+        return (
+            this.posX < obsta.getPosX() + obsta.getWidth() &&
+            this.posX + this.width > obsta.getPosX() &&
+            this.posY < obsta.getPosY() + obsta.getHeight() &&
+            this.posY + this.height > obsta.getPosY()
+        );
     }
 
-    jump(){
-        if (this.onGround) {
-        this.velocityY = -400;
-        this.onGround = false;
-        }
+    jump() {
+        this.velocityY = this.jumpForce;
     }
 }
