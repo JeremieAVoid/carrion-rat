@@ -1,10 +1,11 @@
 class Rat {
     posX;
     posY;
-    length;
+    height;
     width;
     weight = 100;//g
     gravity = 9.81; //m/s
+    velocityY = 0;
     constructor(X,Y,length,width){
         this.posX = X;
         this.posY = Y;
@@ -20,12 +21,24 @@ class Rat {
         return this.posY;
     }
 
-    getLength(){
-        return this.length;
+    setPosY(n){
+        this.posY = n;
+    }
+
+    getHeight(){
+        return this.height;
     }
 
     getWidth(){
         return this.width;
+    }
+
+    getVelocityY(){
+        return this.velocityY;
+    }
+
+    getGravity(){
+        return this.weight*this.gravity;
     }
 
     obstacle (obsta){
@@ -37,7 +50,7 @@ class Rat {
     }
 
     jump(){
-        
+        this.velocityY = -400;
     }
 
 }
