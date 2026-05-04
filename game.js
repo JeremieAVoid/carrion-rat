@@ -12,15 +12,15 @@ ratImg.onload = () => {
   console.log("Rat chargé !");
 };
 
-
+//rat
 const player = {
-  x: 100,
-  y: canvas.height / 2,
-  width: 150,
-  height: 100,
-  velocityY: 0,
-  gravity: 800,
-  jumpForce: -350
+    x: 100,
+    y: canvas.height / 2,
+    width: 150,
+    height: 350,
+    velocityY: 0,
+    gravity: 800,
+    jumpForce: -350
 };
 
 
@@ -34,9 +34,9 @@ const obstacle = {
 
 
 window.addEventListener("keydown", (e) => {
-  if (e.code === "Space") {
-    player.velocityY = player.jumpForce;
-  }
+    if (e.code === "Space") {
+        player.velocityY = player.jumpForce;
+    }
 });
 
 window.addEventListener("mousedown", () => {
@@ -45,28 +45,16 @@ window.addEventListener("mousedown", () => {
 
 
 function update(deltaTime) {
-
-  // --- joueur ---
-  player.velocityY += player.gravity * deltaTime;
-  player.y += player.velocityY * deltaTime;
-
-  // collision sol
-  if (player.y + player.height > canvas.height) {
-    player.y = canvas.height - player.height;
-    player.velocityY = 0;
-  }
-
-  // limite haut
-  if (player.y < 0) {
-    player.y = 0;
-    player.velocityY = 0;
-  }
-
-  obstacle.x -= obstacle.speed * deltaTime;
-
-  if (obstacle.x + obstacle.width < 0) {
-    obstacle.x = canvas.width;
-  }
+    player.velocityY += player.gravity * deltaTime;
+    player.y += player.velocityY * deltaTime;
+        if (player.y + player.height > canvas.height) {
+            player.y = canvas.height - player.height;
+            player.velocityY = 0;
+        }
+    obstacle.x -= obstacle.speed * deltaTime;
+        if (obstacle.x + obstacle.width < 0) {
+            obstacle.x = canvas.width;
+        }
 }
 
 function draw() {
@@ -75,14 +63,14 @@ function draw() {
   ctx.fillStyle = "#a78484";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // sol visuel 
+    //sol
   ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
 
-  // obstacle (os / intestin)
-  ctx.fillStyle = "#e8e2d0";
-  ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+    // obstacle (os / intestin)
+    ctx.fillStyle = "#e8e2d0";
+    ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
 
-  // joueur (rat)
+  //rat
   ctx.drawImage(
     ratImg,
     player.x,
