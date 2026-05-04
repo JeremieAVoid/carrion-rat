@@ -13,11 +13,9 @@ ratImg.onload = () => {
 };
 
 //rat
-const ground = canvas.height - 20;
-const player = new Rat(100, ground - 150, 150, 150);
-
-//obstacle
-const obstacle = new Obstacle(canvas.width,canvas.height-150,150,50,300);
+const player = new Rat(100,canvas.height / 2,350,150);
+const lev1 = new Level(1);
+const obstacles = lev1.game(canvas.width,canvas.height);
 
 window.addEventListener("keydown", (e) => {
     if (e.code === "Space") {
@@ -38,26 +36,19 @@ function update(deltaTime) {
         player.velocityY = 0;
         player.onGround = true;
     }
-    player.obstacle(obstacle);
-    obstacle.shift(deltaTime);
-    if (obstacle.getPosX() + obstacle.getWidth() < 0) {
-        obstacle.setPosX(canvas.width + Math.random() * 300);
+    let obstaclesDraw = [];
+    for (const obstacle of obstacles){
+        player.obstacle(obstacle);
+        obstacle.shift(deltaTime);
+        if (obstacle.getPosX() < canvas.width) {
+            obstacleDraw.push(...obstaclesDraw, obstacle);
+        }
     }
+    drawRectangle(obstaclesDraw)    
 }
 
 //partie graphique
 function draw() {
-    //fond
-    ctx.fillStyle = "#a78484";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    //sol
-    ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
-
-    // obstacle (os / intestin)
-    ctx.fillStyle = "#e8e2d0";
-    ctx.fillRect(obstacle.getPosX(), obstacle.getPosY(), obstacle.getWidth(), obstacle.getHeight());
-
     //rat
     ctx.drawImage(
         ratImg,
@@ -69,15 +60,16 @@ function draw() {
 }
 let lastTime = 0;
 
-function gameLoop(time) {
+function drawRectangle(obstacles){
+    for (const obstacle of obstacles){
+        ctx.fillStyle = "#a78484";
+        ctx.fillRect(0, 0, canvas.height - 20, canvas.width, 20);
 
-  const deltaTime = (time - lastTime) / 1000;
-  lastTime = time;
+        //sol
+        ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
 
-  update(deltaTime);
-  draw();
-
-  requestAnimationFrame(gameLoop);
+        // obstacle (os / intestin)
+        ctx.fillStyle = "#e8e2d0";
+        ctx.fillRect(obstacle.getPosX(), obstacle.getPosY(), obstacle.getWidth(), obstacle.getHeight());
+    }
 }
-
-requestAnimationFrame(gameLoop);
