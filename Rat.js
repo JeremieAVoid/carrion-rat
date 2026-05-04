@@ -6,10 +6,10 @@ class Rat {
     weight = 100;//g
     gravity = 9.81; //m/s
     velocityY = 0;
-    constructor(X,Y,length,width){
+    constructor(X,Y,height,width){
         this.posX = X;
         this.posY = Y;
-        this.length = length;
+        this.height = height;
         this.width = width;
     }
 
