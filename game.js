@@ -11,7 +11,8 @@ ratImg.src = "rat.png";
 // Joueur et niveau
 const player = new Rat(100, canvas.height / 2, 100, 80);
 const lev1 = new Level(1);
-let obstacles = lev1.game(canvas.width, canvas.height);
+let obstaclesBottom = lev1.obstaclesBottom(canvas.width, canvas.height);
+let obstaclesTop = lev1.obstaclesTop(canvas.width, canvas.height);
 let gameOver = false;
 
 // Contrôles
@@ -41,32 +42,37 @@ function update(deltaTime) {
     }
 
     // Mise à jour des obstacles
-    for (let i = obstacles.length - 1; i >= 0; i--) {
-        const obstacle = obstacles[i];
-        obstacle.shift(deltaTime);
+    for (let i = obstaclesTop.length - 1; i >= 0; i--) {
+        const obstacleTop = obstaclesTop[i];
+        obstacleTop.shift(deltaTime);
+
+        const obstacleBottom = obstaclesBottom[i];
+        obstacleBottom.shift(deltaTime);
 
         // Supprimer les obstacles hors écran
-        if (obstacle.getPosX() + obstacle.getWidth() < 0) {
-            obstacles.splice(i, 1);
+        if (obstacleTop.getPosX() + obstacleTop.getWidth() < 0) {
+            obstaclesTop.splice(i, 1);
+            obstaclesBottom.splice(i,1);
             continue;
         }
 
         // Score
-        if (obstacle.getPosX() + obstacle.getWidth() < player.getPosX() && !obstacle.passed) {
-            obstacle.passed = true;
+        if (obstacleTop.getPosX() + obstacleTop.getWidth() < player.getPosX() && !obstacleTop.passed) {
+            obstacleTop.passed = true;
             lev1.score += 1;
         }
 
         // Collision
-        if (player.obstacle(obstacle)) {
+        if (player.obstacle(obstacleTop) || player.obstacle(obstacleBottom)) {
             gameOver = true;
             sauvegarder(lev1.intensity, lev1.score);
         }
     }
 
     // Régénérer les obstacles quand ils sont tous passés
-    if (obstacles.length === 0) {
-        obstacles = lev1.game(canvas.width, canvas.height);
+    if (obstaclesTop.length === 0 || obstaclesBottom.length === 0) {
+        obstaclesTop = lev1.obstaclesTop(canvas.width, canvas.height);
+        obstaclesBottom = lev1.obstaclesBottom(canvas.width, canvas.height);
     }
 }
 
@@ -92,7 +98,16 @@ function draw() {
 
     // Obstacles
     ctx.fillStyle = "#e8e2d0";
-    for (const obstacle of obstacles) {
+    for (const obstacle of obstaclesTop) {
+        ctx.fillRect(
+            obstacle.getPosX(),
+            obstacle.getPosY(),
+            obstacle.getWidth(),
+            obstacle.getHeight()
+        );
+    }
+
+    for (const obstacle of obstaclesBottom) {
         ctx.fillRect(
             obstacle.getPosX(),
             obstacle.getPosY(),
