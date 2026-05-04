@@ -14,9 +14,8 @@ ratImg.onload = () => {
 
 //rat
 const player = new Rat(100,canvas.height / 2,350,150);
-
-//obstacle
-const obstacle = new Obstacle(canvas.width,canvas.height-150,150,50,300);
+const lev1 = new Level(1);
+const obstacles = lev1.game(canvas.width,canvas.height);
 
 window.addEventListener("keydown", (e) => {
     if (e.code === "Space") {
@@ -31,26 +30,19 @@ function update(deltaTime) {
         player.setPosY(canvas.height - player.getHeight());
         player.velocityY = 0;
     }
-    player.obstacle(obstacle);
-    obstacle.shift(deltaTime);
-    if (obstacle.getPosX() + obstacle.getWidth() < 0) {
-        obstacle.setPosX(canvas.width);
+    let obstaclesDraw = [];
+    for (const obstacle of obstacles){
+        player.obstacle(obstacle);
+        obstacle.shift(deltaTime);
+        if (obstacle.getPosX() < canvas.width) {
+            obstacleDraw.push(...obstaclesDraw, obstacle);
+        }
     }
+    drawRectangle(obstaclesDraw)    
 }
 
 //partie graphique
 function draw() {
-    //fond
-    ctx.fillStyle = "#a78484";
-    ctx.fillRect(0, 0, canvas.height - 20, canvas.width, 20);
-
-    //sol
-    ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
-
-    // obstacle (os / intestin)
-    ctx.fillStyle = "#e8e2d0";
-    ctx.fillRect(obstacle.getPosX(), obstacle.getPosY(), obstacle.getWidth(), obstacle.getHeight());
-
     //rat
     ctx.drawImage(
         ratImg,
@@ -61,3 +53,16 @@ function draw() {
     );
 }
 
+function drawRectangle(obstacles){
+    for (const obstacle of obstacles){
+        ctx.fillStyle = "#a78484";
+        ctx.fillRect(0, 0, canvas.height - 20, canvas.width, 20);
+
+        //sol
+        ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+
+        // obstacle (os / intestin)
+        ctx.fillStyle = "#e8e2d0";
+        ctx.fillRect(obstacle.getPosX(), obstacle.getPosY(), obstacle.getWidth(), obstacle.getHeight());
+    }
+}
