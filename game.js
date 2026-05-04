@@ -1,22 +1,28 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
 
-//image du rat
 const ratImg = new Image();
 ratImg.src = "rat.png";
 
+const player = new Rat(100, 0, 150, 150);
+const lev1 = new Level(1);
+let obstacles = [];
+let lastTime = 0;
 
-function gameLoop(timestamp) {
-    const deltaTime = 0.016;
-    update(deltaTime);
-    draw();
+ratImg.onload = () => {
+    console.log("Rat image loaded successfully.");
+    player.setPosY(canvas.height - 20 - player.getHeight());
+    obstacles = lev1.game(canvas.width, canvas.height);
+    lastTime = performance.now();
     requestAnimationFrame(gameLoop);
-}
-
-ratImg.onload = () => requestAnimationFrame(gameLoop);
+};
 
 //rat
 const player = new Rat(100,canvas.height / 2,350,150);
