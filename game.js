@@ -17,7 +17,7 @@ const player = {
   x: 100,
   y: canvas.height / 2,
   width: 150,
-  height: 350,
+  height: 100,
   velocityY: 0,
   gravity: 800,
   jumpForce: -350
