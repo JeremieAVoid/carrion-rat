@@ -17,7 +17,7 @@ class Obstacle{
         return this.posX;
     }
 
-    setPosY(n){
+    setPosX(n){
         this.posX = n;
     }    
 

@@ -38,19 +38,25 @@ class Rat {
     }
 
     getGravity(){
-        return this.weight*this.gravity;
+        return 980; // pixels/s² (approx)
     }
 
-    obstacle (obsta){
-        if (this.posX+this.length <= obsta.getLength()+obsta.getPosX || this.posX <= obsta.getLength()+obsta.getPosX){
-            if (this.posY+this.width >= obsta.getPosY){
-                this.posY = obsta.getPosY-this.width;
-            }
+    obstacle(obsta) {
+        if (
+            this.posX < obsta.getPosX() + obsta.getWidth() &&
+            this.posX + this.width > obsta.getPosX() &&
+            this.posY < obsta.getPosY() + obsta.getHeight() &&
+            this.posY + this.height > obsta.getPosY()
+        ) {
+        // collision → poser le rat dessus
+            this.posY = obsta.getPosY() - this.height;
+            this.velocityY = 0;
         }
     }
 
     jump(){
-        this.velocityY = -400;
+        if (this.velocityY === 0) {
+            this.velocityY = -400;
+        }
     }
-
 }

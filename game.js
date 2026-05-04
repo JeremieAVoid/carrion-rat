@@ -27,14 +27,15 @@ window.addEventListener("keydown", (e) => {
 function update(deltaTime) {
     player.velocityY += player.getGravity() * deltaTime;
     player.y += player.velocityY * deltaTime;
-    if (player.getPosY() + player.getHeight() > canvas.height) {
-        player.setPosY(canvas.height - player.getHeight());
-        player.velocityY = 0;
-    }
+    const ground = canvas.height - 20;
+        if (player.getPosY() + player.getHeight() > ground) {
+            player.setPosY(ground - player.getHeight());
+            player.velocityY = 0;
+        }
     player.obstacle(obstacle);
     obstacle.shift(deltaTime);
     if (obstacle.getPosX() + obstacle.getWidth() < 0) {
-        obstacle.setPosX(canvas.width);
+        obstacle.setPosX(canvas.width + Math.random() * 300);
     }
 }
 
@@ -42,7 +43,7 @@ function update(deltaTime) {
 function draw() {
     //fond
     ctx.fillStyle = "#a78484";
-    ctx.fillRect(0, 0, canvas.height - 20, canvas.width, 20);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     //sol
     ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
@@ -60,3 +61,17 @@ function draw() {
         player.getHeight()
     );
 }
+let lastTime = 0;
+
+function gameLoop(time) {
+
+  const deltaTime = (time - lastTime) / 1000;
+  lastTime = time;
+
+  update(deltaTime);
+  draw();
+
+  requestAnimationFrame(gameLoop);
+}
+
+requestAnimationFrame(gameLoop);
