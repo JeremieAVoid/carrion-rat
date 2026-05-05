@@ -12,11 +12,11 @@ function nouvellePartie() {
 }
 
 function reprendrePartie() {
-    const sauvegarde = charger(); // votre fonction de chargement
+    const sauvegarde = charger(); 
     if (sauvegarde) {
         document.getElementById("menuScreen").style.display = "none";
         gameStarted = true;
-        // appliquer la sauvegarde
+
     } else {
         alert("Aucune partie sauvegardée !");
     }
@@ -32,7 +32,7 @@ function lancerNiveau(n) {
     document.getElementById("levelScreen").style.display = "none";
     gameStarted = true;
     gameOver = false;
-    // adapter la difficulté selon n
+
 }
 
 function retourMenu() {
@@ -145,7 +145,6 @@ function update(deltaTime) {
         }
     }
 
-    // Régénérer les obstacles quand ils sont tous passés
     if (obstaclesTop.length === 0 || obstaclesBottom.length === 0) {
         obstaclesBottom = lev1.obstaclesBottom(canvas.width, canvas.height);
         obstaclesTop = lev1.obstaclesTop(canvas.width, canvas.height);
@@ -251,7 +250,7 @@ function gameLoop(timestamp) {
 }
 
 let imagesChargees = 0;
-const totalImages = 10; // 3 rat + 1 bg + 3 obs top + 3 obs bottom
+const totalImages = 10; 
 
 function imageChargee() {
     imagesChargees++;
