@@ -1,34 +1,26 @@
 class Level {
     intensity;
     score = 0;
+    space = 0;
 
     constructor(intensity) {
         this.intensity = intensity;
+        this.space = Math.max(120, 350 - this.intensity * 5);
     }
 
-    obstaclesBottom(largeur, hauteur) {
-        let obstacles = [];
+    obstacles(largeur, hauteur) {
+        let obstaclesBottom = [];
+        let obstaclesTop = [];
         for (let i = 0; i < this.intensity * 5; i++) {
-            const x = largeur + i * 400;
-            const y = hauteur - 120;
-            const height = 100;
+            const x_b = largeur + i * (Math.floor(Math.random() * (largeur / 2)));
+            const x_t = largeur + i * (Math.floor(Math.random() * (largeur / 2)));
+            const topHeight = 100 + Math.floor(Math.random() * (hauteur / 2 - 120));
+            const bottomHeight = hauteur - topHeight - this.space;
             const width = 50 + this.intensity * 10;
             const speed = 200 + this.intensity * 50;
-            obstacles.push(new Obstacle(x, y, height, width, speed));
+            obstaclesTop.push(new Obstacle(x_t, 20, topHeight, width, speed));
+            obstaclesBottom.push(new Obstacle(x_b, hauteur - bottomHeight, bottomHeight, width, speed));
         }
-        return obstacles;
-    }
-
-    obstaclesTop(largeur,hauteur){
-        let obstacles = [];
-        for (let i = 0; i < this.intensity * 5; i++) {
-            const x = largeur + i * 400;
-            const y = 20;
-            const height = 100;
-            const width = 50 + this.intensity * 10;
-            const speed = 200 + this.intensity * 50;
-            obstacles.push(new Obstacle(x, y, height, width, speed));
-        }
-        return obstacles;
+        return [obstaclesBottom, obstaclesTop];
     }
 }
