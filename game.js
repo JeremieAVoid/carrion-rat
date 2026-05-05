@@ -53,11 +53,21 @@ resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
 // Image du rat
-const ratImg = new Image();
-ratImg.src = "rat.png";
+const ratFrames = [];
+const ratImg1 = new Image();
+const ratImg2 = new Image();
+const ratImg3 = new Image();
+ratImg1.src = "rat_evil.png";
+ratImg2.src = "rat_evil_1.png";
+ratImg3.src = "rat_evil_2.png"
+ratFrames.push(ratImg1, ratImg2, ratImg3);
+
+let currentFrame = 0;
+let frameTimer = 0;
+const frameInterval = 10; // change de frame toutes les 10 boucles
 
 // Joueur et niveau
-const player = new Rat(100, canvas.height / 2, 100, 80);
+const player = new Rat(100, canvas.height / 2, 100, 150);
 const lev1 = new Level(1);
 let obstaclesBottom = lev1.obstaclesBottom(canvas.width, canvas.height);
 let obstaclesTop = lev1.obstaclesTop(canvas.width, canvas.height);
@@ -137,16 +147,20 @@ function draw() {
     ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
     // Sol
-    ctx.fillStyle = "#a78484";
+    ctx.fillStyle = "#000000";
     ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
     //Plafond
-    ctx.fillStyle = "#a78484";
+    ctx.fillStyle = "#000000";
     ctx.fillRect(0,0,canvas.width,20);
 
-
-    // Rat
+    // rat
+    frameTimer++;
+        if (frameTimer >= frameInterval) {
+            currentFrame = (currentFrame + 1) % ratFrames.length;
+            frameTimer = 0;
+        }
     ctx.drawImage(
-        ratImg,
+        ratFrames[currentFrame],
         player.getPosX(),
         player.getPosY(),
         player.getWidth(),
@@ -204,9 +218,18 @@ function gameLoop(timestamp) {
     requestAnimationFrame(gameLoop);
 }
 
-ratImg.onload = () => requestAnimationFrame(gameLoop);
+let imagesChargees = 0;
+const totalImages = ratFrames.length + 1;
 
-ratImg.onerror = () => {
-    console.error("rat.png introuvable ! Vérifiez le nom du fichier.");
-    requestAnimationFrame(gameLoop);
-};
+function imageChargee() {
+    imagesChargees++;
+    if (imagesChargees >= totalImages) {
+        requestAnimationFrame(gameLoop);
+    }
+}
+
+ratImg1.onload = imageChargee;
+ratImg2.onload = imageChargee;
+ratImg3.onload = imageChargee;
+bgImg.onload = imageChargee;
+ 
