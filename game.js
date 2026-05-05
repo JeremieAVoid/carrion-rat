@@ -1,3 +1,46 @@
+let gameStarted = false;
+let currentLevel = 1;
+
+function nouvellePartie() {
+    document.getElementById("menuScreen").style.display = "none";
+    gameStarted = true;
+    gameOver = false;
+    lev1.score = 0;
+    player.posY = canvas.height / 2;
+    player.velocityY = 0;
+    obstacles = lev1.game(canvas.width, canvas.height);
+}
+
+function reprendrePartie() {
+    const sauvegarde = charger(); // votre fonction de chargement
+    if (sauvegarde) {
+        document.getElementById("menuScreen").style.display = "none";
+        gameStarted = true;
+        // appliquer la sauvegarde
+    } else {
+        alert("Aucune partie sauvegardée !");
+    }
+}
+
+function choixNiveau() {
+    document.getElementById("menuScreen").style.display = "none";
+    document.getElementById("levelScreen").style.display = "flex";
+}
+
+function lancerNiveau(n) {
+    currentLevel = n;
+    document.getElementById("levelScreen").style.display = "none";
+    gameStarted = true;
+    gameOver = false;
+    // adapter la difficulté selon n
+}
+
+function retourMenu() {
+    document.getElementById("levelScreen").style.display = "none";
+    document.getElementById("menuScreen").style.display = "flex";
+}
+
+
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 

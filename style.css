@@ -7,3 +7,19 @@ body {
 canvas {
     display: block;
 }
+
+.menuBtn {
+    background: #8b0000;
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 24px;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    width: 300px;
+    transition: background 0.2s;
+}
+.menuBtn:hover {
+    background: #cc0000;
+}
