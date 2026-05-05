@@ -152,6 +152,7 @@ function draw() {
     // Sol
     ctx.fillStyle = "#000000";
     ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+    
     //Plafond
     ctx.fillStyle = "#000000";
     ctx.fillRect(0,0,canvas.width,20);
