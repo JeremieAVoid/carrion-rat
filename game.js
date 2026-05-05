@@ -117,7 +117,7 @@ function update(deltaTime) {
         obstacleBottom.shift(deltaTime);
 
         // Supprimer les obstacles hors écran
-        if (obstacleTop.getPosX() + obstacleTop.getWidth() < 0) {
+        if (obstacleTop.getPosX() + obstacleTop.getWidth() < 0 && obstacleBottom.getPosX() + obstacleBottom.getWidth() < 0) {
             obstaclesTop.splice(i, 1);
             obstaclesBottom.splice(i,1);
             continue;
@@ -138,8 +138,8 @@ function update(deltaTime) {
 
     // Régénérer les obstacles quand ils sont tous passés
     if (obstaclesTop.length === 0 || obstaclesBottom.length === 0) {
-        obstaclesTop = lev1.obstaclesTop(canvas.width, canvas.height);
         obstaclesBottom = lev1.obstaclesBottom(canvas.width, canvas.height);
+        obstaclesTop = lev1.obstaclesTop(canvas.width, canvas.height);
     }
 }
 
