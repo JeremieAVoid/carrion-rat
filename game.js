@@ -12,6 +12,7 @@ window.addEventListener("resize", resizeCanvas);
 const ratImg = new Image();
 ratImg.src = "rat.png";
 
+
 // Joueur et niveau
 const player = new Rat(100, canvas.height / 2, 100, 80);
 const lev1 = new Level(1);
@@ -80,9 +81,12 @@ function update(deltaTime) {
     }
 
     // Régénérer les obstacles quand ils sont tous passés
-    if (obstaclesTop.length === 0 || obstaclesBottom.length === 0) {
+    if (obstaclesTop.length === 0 || obstaclesBottom.length === 0 || temps==0) {
         obstaclesBottom = lev1.obstaclesBottom(canvas.width, canvas.height);
         obstaclesTop = lev1.obstaclesTop(canvas.width, canvas.height);
+    }
+    if (temps == 0){
+        isEnd(player,canvas.width,canvas.height);
     }
 }
 
@@ -109,6 +113,7 @@ function draw() {
         player.getWidth(),
         player.getHeight()
     );
+    
 
     // Obstacles
     ctx.fillStyle = "#e8e2d0";
