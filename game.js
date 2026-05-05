@@ -15,7 +15,8 @@ ratImg.src = "rat.png";
 // Joueur et niveau
 const player = new Rat(100, canvas.height / 2, 100, 80);
 const lev1 = new Level(1);
-let [obstaclesBottom, obstaclesTop] = lev1.obstacles(canvas.width, canvas.height);
+let obstaclesBottom = lev1.obstaclesBottom(canvas.width, canvas.height);
+let obstaclesTop = lev1.obstaclesTop(canvas.width, canvas.height);
 let gameOver = false;
 
 // Contrôles
@@ -59,7 +60,7 @@ function update(deltaTime) {
         obstacleBottom.shift(deltaTime);
 
         // Supprimer les obstacles hors écran
-        if (obstacleTop.getPosX() + obstacleTop.getWidth() < 0) {
+        if (obstacleTop.getPosX() + obstacleTop.getWidth() < 0 && obstacleBottom.getPosX() + obstacleBottom.getWidth() < 0) {
             obstaclesTop.splice(i, 1);
             obstaclesBottom.splice(i,1);
             continue;
@@ -80,7 +81,8 @@ function update(deltaTime) {
 
     // Régénérer les obstacles quand ils sont tous passés
     if (obstaclesTop.length === 0 || obstaclesBottom.length === 0) {
-        [obstaclesBottom, obstaclesTop] = lev1.obstacles(canvas.width, canvas.height);
+        obstaclesBottom = lev1.obstaclesBottom(canvas.width, canvas.height);
+        obstaclesTop = lev1.obstaclesTop(canvas.width, canvas.height);
     }
 }
 
