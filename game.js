@@ -40,7 +40,8 @@ function retourMenu() {
     document.getElementById("menuScreen").style.display = "flex";
 }
 
-
+const bgImg = new Image();
+bgImg.src = "horror_level.png"; // nom de votre image
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -133,8 +134,7 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Fond
-    ctx.fillStyle = "#1a1a2e";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
     // Sol
     ctx.fillStyle = "#a78484";
