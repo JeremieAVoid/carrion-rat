@@ -2,7 +2,6 @@ class Level {
     intensity;
     score = 0;
     space = 0;
-
     constructor(intensity) {
         this.intensity = intensity;
         this.space = Math.max(120, 350 - this.intensity * 5);

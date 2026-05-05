@@ -2,8 +2,20 @@ body {
     margin: 0;
     overflow: hidden;
     background: black;
+    position: relative;
 }
 
 canvas {
     display: block;
+}
+
+#timer {
+    position: absolute;
+    top: 40px;
+    left: 20px;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 28px;
+    z-index: 10;
+    pointer-events: none;
 }
