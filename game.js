@@ -45,8 +45,17 @@ bgImg.src = "horror_level.png";
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-const obstacleImg = new Image();
-obstacleImg.src = "obstacles_evil.png";
+const obstacleTopImgs = [];
+const obsTop1 = new Image(); obsTop1.src = "obstacles_top_evil.png";
+const obsTop2 = new Image(); obsTop2.src = "obstacles_top_evil_1.png";
+const obsTop3 = new Image(); obsTop3.src = "obstacles_top_evil_2.png";
+obstacleTopImgs.push(obsTop1, obsTop2, obsTop3);
+
+const obstacleBottomImgs = [];
+const obsBot1 = new Image(); obsBot1.src = "obstacles_bottom_evil.png";
+const obsBot2 = new Image(); obsBot2.src = "obstacles_bottom_evil_1.png";
+const obsBot3 = new Image(); obsBot3.src = "obstacles_bottom_evil_2.png";
+obstacleBottomImgs.push(obsBot1, obsBot2, obsBot3);
 
 function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -192,7 +201,7 @@ function draw() {
     // Obstacles
     for (const obstacle of obstaclesTop) {
         ctx.drawImage(
-            obstacleImg,
+            obstacleTopImgs[obstacle.imgIndex],
             obstacle.getPosX(),
             obstacle.getPosY(),
             obstacle.getWidth(),
@@ -202,7 +211,7 @@ function draw() {
 
     for (const obstacle of obstaclesBottom) {
         ctx.drawImage(
-            obstacleImg,
+            obstacleBottomImgs[obstacle.imgIndex],
             obstacle.getPosX(),
             obstacle.getPosY(),
             obstacle.getWidth(),
@@ -242,7 +251,7 @@ function gameLoop(timestamp) {
 }
 
 let imagesChargees = 0;
-const totalImages = ratFrames.length + 2;
+const totalImages = 10; // 3 rat + 1 bg + 3 obs top + 3 obs bottom
 
 function imageChargee() {
     imagesChargees++;
@@ -255,6 +264,20 @@ ratImg1.onload = imageChargee;
 ratImg2.onload = imageChargee;
 ratImg3.onload = imageChargee;
 bgImg.onload = imageChargee;
-obstacleImg.onload = imageChargee;
+obsTop1.onload = imageChargee;
+obsTop2.onload = imageChargee;
+obsTop3.onload = imageChargee;
+obsBot1.onload = imageChargee;
+obsBot2.onload = imageChargee;
+obsBot3.onload = imageChargee;
 
- 
+ratImg1.onerror = () => console.error("ratImg1 introuvable");
+ratImg2.onerror = () => console.error("ratImg2 introuvable");
+ratImg3.onerror = () => console.error("ratImg3 introuvable");
+bgImg.onerror = () => console.error("bgImg introuvable");
+obsTop1.onerror = () => console.error("obsTop1 introuvable");
+obsTop2.onerror = () => console.error("obsTop2 introuvable");
+obsTop3.onerror = () => console.error("obsTop3 introuvable");
+obsBot1.onerror = () => console.error("obsBot1 introuvable");
+obsBot2.onerror = () => console.error("obsBot2 introuvable");
+obsBot3.onerror = () => console.error("obsBot3 introuvable");

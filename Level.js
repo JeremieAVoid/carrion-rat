@@ -15,8 +15,10 @@ class Level {
             const height = 100 + Math.floor(Math.random() * 100);
             const width = height * 0.6;
             const speed = 200 + this.intensity * 50;
-            obstaclesTop.push(new Obstacle(x, 20, height, width, speed));
-            currentX += 300 + Math.floor(Math.random() * 300);
+            const obs = new Obstacle(x, 20, height, width, speed);
+                obs.imgIndex = Math.floor(Math.random() * 3);
+                obstaclesTop.push(obs);
+                currentX += 300 + Math.floor(Math.random() * 300);
         }
         return obstaclesTop;
     }
@@ -31,7 +33,9 @@ class Level {
             const height = hauteur - y;
             const width = height * 0.4;
             const speed = 200 + this.intensity * 50;
-            obstaclesBottom.push(new Obstacle(x, y, height, width, speed));
+            const obs = new Obstacle(x, y, height, width, speed);
+            obs.imgIndex = Math.floor(Math.random() * 3);
+            obstaclesBottom.push(obs);
             currentX += 300 + Math.floor(Math.random() * 300);
         }
         return obstaclesBottom;
