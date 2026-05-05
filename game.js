@@ -41,9 +41,12 @@ function retourMenu() {
 }
 
 const bgImg = new Image();
-bgImg.src = "horror_level.png"; // nom de votre image
+bgImg.src = "horror_level.png"; 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+
+const obstacleImg = new Image();
+obstacleImg.src = "obstacles_evil.png";
 
 function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -64,7 +67,7 @@ ratFrames.push(ratImg1, ratImg2, ratImg3);
 
 let currentFrame = 0;
 let frameTimer = 0;
-const frameInterval = 10; // change de frame toutes les 10 boucles
+const frameInterval = 30;
 
 // Joueur et niveau
 const player = new Rat(100, canvas.height / 2, 100, 150);
@@ -168,9 +171,9 @@ function draw() {
     );
 
     // Obstacles
-    ctx.fillStyle = "#e8e2d0";
     for (const obstacle of obstaclesTop) {
-        ctx.fillRect(
+        ctx.drawImage(
+            obstacleImg,
             obstacle.getPosX(),
             obstacle.getPosY(),
             obstacle.getWidth(),
@@ -179,7 +182,8 @@ function draw() {
     }
 
     for (const obstacle of obstaclesBottom) {
-        ctx.fillRect(
+        ctx.drawImage(
+            obstacleImg,
             obstacle.getPosX(),
             obstacle.getPosY(),
             obstacle.getWidth(),
@@ -219,7 +223,7 @@ function gameLoop(timestamp) {
 }
 
 let imagesChargees = 0;
-const totalImages = ratFrames.length + 1;
+const totalImages = ratFrames.length + 2;
 
 function imageChargee() {
     imagesChargees++;
@@ -232,4 +236,6 @@ ratImg1.onload = imageChargee;
 ratImg2.onload = imageChargee;
 ratImg3.onload = imageChargee;
 bgImg.onload = imageChargee;
+obstacleImg.onload = imageChargee;
+
  
