@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Choix du niveau - Carrion Rat</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="rat.png" type="image/x-icon">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #111;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .choice-screen {
+            width: min(90%, 500px);
+            padding: 40px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.85);
+            border: 2px solid #555;
+            border-radius: 16px;
+        }
+
+        .choice-screen h1 {
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        .choice-screen .menuBtn {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .choice-screen .menuBtn:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="choice-screen">
+        <h1>Choisir le niveau</h1>
+        <button class="menuBtn" onclick="window.location.href='jeu.html?niveau=1'">Niveau 1</button>
+        <button class="menuBtn" onclick="window.location.href='jeu.html?niveau=2'">Niveau 2</button>
+        <button class="menuBtn" onclick="window.location.href='jeu.html?niveau=3'">Niveau 3</button>
+        <button class="menuBtn" style="background: #555;" onclick="window.location.href='index.html'">← Retour au menu</button>
+    </div>
+</body>
+</html>
