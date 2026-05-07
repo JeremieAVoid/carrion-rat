@@ -4,7 +4,7 @@ class Game {
         this.ctx = ctx;
 
         this.bgImg = new Image();
-        this.bgImg.src = "horror_level.png";
+        this.bgImg.src = "images/horror_level.png";
 
         this.ratFrames = [];
         this.obstacleTopImgs = [];
@@ -33,19 +33,19 @@ class Game {
 
     async loadAssets() {
         const topSrc = [
-            "obstacles_top_evil.png",
-            "obstacles_top_evil_1.png",
-            "obstacles_top_evil_2.png"
+            "images/obstacles_top_evil.png",
+            "images/obstacles_top_evil_1.png",
+            "images/obstacles_top_evil_2.png"
         ];
         const bottomSrc = [
-            "obstacles_bottom_evil.png",
-            "obstacles_bottom_evil_1.png",
-            "obstacles_bottom_evil_2.png"
+            "images/obstacles_bottom_evil.png",
+            "images/obstacles_bottom_evil_1.png",
+            "images/obstacles_bottom_evil_2.png"
         ];
         const ratSrc = [
-            "rat_evil.png",
-            "rat_evil_1.png",
-            "rat_evil_2.png"
+            "images/rat_evil.png",
+            "images/rat_evil_1.png",
+            "images/rat_evil_2.png"
         ];
 
         const promises = [];
