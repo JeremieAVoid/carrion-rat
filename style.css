@@ -10,19 +10,20 @@ canvas {
 }
 
 .menuBtn {
-    background: #8b0000;
-    color: white;
+    background: none;
     border: none;
-    padding: 15px 40px;
-    font-size: 24px;
-    margin: 10px;
+    padding: 0;
     cursor: pointer;
-    border-radius: 8px;
-    width: 300px;
-    transition: background 0.2s;
+    margin-bottom: 15px;
 }
-.menuBtn:hover {
-    background: #cc0000;
+
+.menuBtn img {
+    width: 300px;
+    transition: transform 0.1s;
+}
+
+.menuBtn img:hover {
+    transform: scale(1.05);
 }
 #timer {
     position: absolute;

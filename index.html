@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-
+    <link href="https://fonts.googleapis.com/css2?family=Butcherman&display=swap" rel="stylesheet">
     <title>Carrion Rat</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="rat.png" type="image/x-icon">
@@ -24,11 +24,26 @@
     font-family: Arial;
     z-index: 10;
 ">
-    <h1 style="font-size: 60px; margin-bottom: 50px;"> <img src="rat.png"> RAT GAME</h1>
+<div style="position: relative; width: 800px; margin-bottom: 50px;">
+    <img src="titre_jeu.png" alt="Carrion Rat" style="width: 800px;">
+    <canvas id="ratCanvas" style="
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 800px;
+    height: 150px;
+    pointer-events: none;
+    "></canvas>
+</div>
     
-    <button class="menuBtn" onclick="nouvellePartie()">Nouvelle Partie</button>
-    <button class="menuBtn" onclick="reprendrePartie()">Reprendre</button>
-    <button class="menuBtn" onclick="choixNiveau()">Choix du Niveau</button>
+<button class="menuBtn" onclick="nouvellePartie()">
+    <img src="new_game.png" alt="Nouvelle Partie">
+</button>
+<button class="menuBtn" onclick="reprendrePartie()">
+    <img src="reprendre.png" alt="Reprendre">
+</button>
+<button class="menuBtn" onclick="choixNiveau()">
+    <img src="level_choice.png" alt="Choix du Niveau">
+</button>
 </div>
 
 <div id="levelScreen" style="
@@ -60,5 +75,6 @@
     <script src="Level.js"></script>
     <script src="game.js"></script>
     <script src="timer.js"></script>
+    <script src="menuRat.js"></script>
 </body>
 </html>
