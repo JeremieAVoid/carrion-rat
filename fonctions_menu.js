@@ -4,11 +4,9 @@ function nouvellePartie() {
 }
 
 function reprendrePartie() {
-    const sauvegarde = charger(); // fonction de chargement
+    const sauvegarde = localStorage.getItem("gameProgress");
     if (sauvegarde) {
-        document.getElementById("menuScreen").style.display = "none";
-        gameStarted = true;
-        // appliquer la sauvegarde
+        window.location.href = 'jeu.html?action=reprendre';
     } else {
         alert("Aucune partie sauvegardée !");
     }
