@@ -177,11 +177,13 @@ class Game {
         this.ctx.fillRect(0, this.canvas.height - 20, this.canvas.width, 20);
         this.ctx.fillRect(0, 0, this.canvas.width, 20);
 
+    if (!this.gameOver) {
         this.frameTimer++;
         if (this.frameTimer >= this.frameInterval) {
             this.currentFrame = (this.currentFrame + 1) % this.ratFrames.length;
             this.frameTimer = 0;
         }
+    }
 
         this.ctx.drawImage(
             this.ratFrames[this.currentFrame],
