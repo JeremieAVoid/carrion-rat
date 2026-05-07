@@ -12,8 +12,7 @@ class Game {
 
         this.currentFrame = 0;
         this.frameTimer = 0;
-        this.frameInterval = 30;
-
+        this.frameInterval = 40;
         this.player = null;
         this.currentLev = null;
         this.obstaclesTop = [];
@@ -54,6 +53,7 @@ class Game {
         for (const src of topSrc) {
             promises.push(this.loadImage(src).then(img => this.obstacleTopImgs.push(img)));
         }
+
         for (const src of bottomSrc) {
             promises.push(this.loadImage(src).then(img => this.obstacleBottomImgs.push(img)));
         }
@@ -166,7 +166,7 @@ class Game {
             const x = Math.sin(time * 0.3 + i * 1.5) * this.canvas.width;
             const y = this.canvas.height * (i / 5);
             const gradient = this.ctx.createRadialGradient(x, y, 0, x, y, 1000);
-            gradient.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
+            gradient.addColorStop(0, 'rgba(255, 255, 255, 0.1)');
             gradient.addColorStop(1, 'rgba(255, 255, 255, 0.01)');
             this.ctx.fillStyle = gradient;
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
