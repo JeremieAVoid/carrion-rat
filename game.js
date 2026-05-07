@@ -89,9 +89,24 @@ class Game {
     startLevel(level) {
         this.currentLevel = level;
         this.resetLevel(level);
+        const musicJeu = document.getElementById("musicJeu");
+        if (musicJeu) {
+            musicJeu.currentTime = 0;
+            musicJeu.volume = 0.1;
+            musicJeu.play();
+        }
+
+        const ambianceJeu = document.getElementById("ambianceJeu");
+        if (ambianceJeu) {
+            ambianceJeu.currentTime = 0;
+            ambianceJeu.volume = 0.6;
+            ambianceJeu.play();
+        }
+
         this.startLoop();
     }
 
+    
     startLoop() {
         if (this.animationId) {
             cancelAnimationFrame(this.animationId); // ← ajout
