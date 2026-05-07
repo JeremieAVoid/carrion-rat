@@ -6,7 +6,7 @@ window.addEventListener("load", () => {
     canvas.height = 150;
 
     const ratFrames = [];
-    const imgNames = ["rat_evil.png", "rat_evil_1.png", "rat_evil_2.png"];
+    const imgNames = ["images/rat_evil.png", "images/rat_evil_1.png", "images/rat_evil_2.png"];
 
     imgNames.forEach(name => {
         const img = new Image();
