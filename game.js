@@ -2,6 +2,7 @@ class Game {
     constructor(canvas, ctx) {
         this.canvas = canvas;
         this.ctx = ctx;
+        this.animationId = null;
 
         this.bgImg = new Image();
         this.bgImg.src = "images/horror_level.png";
@@ -92,8 +93,11 @@ class Game {
     }
 
     startLoop() {
+        if (this.animationId) {
+            cancelAnimationFrame(this.animationId); // ← ajout
+        }
         this.lastTime = null;
-        requestAnimationFrame(this.gameLoop.bind(this));
+        this.animationId = requestAnimationFrame(this.gameLoop.bind(this)); // ← ajout animationId
     }
 
     update(deltaTime) {
@@ -153,7 +157,7 @@ class Game {
 
         this.update(deltaTime);
         this.draw();
-        requestAnimationFrame(this.gameLoop.bind(this));
+        this.animationId = requestAnimationFrame(this.gameLoop.bind(this)); // ← ajout animationId
     }
 
     draw() {
