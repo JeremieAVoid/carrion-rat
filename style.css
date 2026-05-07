@@ -1,3 +1,7 @@
+html, body {
+    height: 100%;
+}
+
 body {
     margin: 0;
     overflow: hidden;
@@ -9,6 +13,22 @@ canvas {
     display: block;
 }
 
+.menuBtn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.menuBtn img {
+    width: 300px;
+    transition: transform 0.1s;
+}
+
+.menuBtn img:hover {
+    transform: scale(1.05);
+}
 #timer {
     position: absolute;
     top: 40px;
@@ -18,4 +38,32 @@ canvas {
     font-size: 28px;
     z-index: 10;
     pointer-events: none;
+}
+
+#menuScreen{
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: url('images/accueil_skull.png') center/cover no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-family: Arial;
+    z-index: 10;
+}
+
+#ratCanvas{
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 800px;
+    height: 150px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.titre {
+    position: relative;
+    z-index: 2;
 }

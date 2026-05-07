@@ -3,20 +3,31 @@
 
 <head>
     <meta charset="UTF-8">
-
+    <link href="https://fonts.googleapis.com/css2?family=Butcherman&display=swap" rel="stylesheet">
     <title>Carrion Rat</title>
     <link rel="stylesheet" href="style.css">
-
+    <link rel="icon" href="images/rat.png" type="image/x-icon">
 </head>
 
 <body>
-    <canvas id="gameCanvas"></canvas>
-    <div id="timer"></div>
+
+<div id="menuScreen">
+<div class="titre" style="position: relative; width: 800px; margin-bottom: 50px;">
+    <img src="images/titre_jeu.png" alt="Carrion Rat" style="width: 800px; height: auto;">
+    <canvas id="ratCanvas"></canvas>
+</div>
+    
+<button class="menuBtn" onclick="nouvellePartie()">
+    <img src="images/new_game.png" alt="Nouvelle Partie">
+</button>
+<button class="menuBtn" onclick="reprendrePartie()">
+    <img src="images/reprendre.png" alt="Reprendre">
+</button>
+<button class="menuBtn" onclick="choixNiveau()">
+    <img src="images/level_choice.png" alt="Choix du Niveau">
+</button>
+</div>
     <script src="donnees.js"></script>
-    <script src="Rat.js"></script>
-    <script src="Obstacle.js"></script>
-    <script src="Level.js"></script>
-    <script src="timer.js"></script>
-    <script src="game.js"></script>
+    <script src="fonctions_menu.js"></script>
 </body>
 </html>
