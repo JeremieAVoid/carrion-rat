@@ -28,6 +28,8 @@ class Game {
             this.pancarteCharge = true;
         };
         this.lastTime = null;
+
+        this.isBreak = false;
     }
 
     loadImage(src) {
@@ -103,14 +105,24 @@ class Game {
         this.startLoop();
     }
 
+    breakGame(){
+        if (this.isBreak) {this.isBreak = true;}
+        else {this.isBreak = false}
+        return this.update(this.lastTime,this.isBreak);
+    }
+
+    restartGame(){
+        requestAnimationFrame(this.gameLoop.bind(this));
+    }
+
     startLoop() {
         this.lastTime = null;
         requestAnimationFrame(this.gameLoop.bind(this));
     }
 
-    update(deltaTime) {
+    update(deltaTime,b = false) {
         if (this.gameOver) return;
-
+        if (b) return ;
         // Vérifier si le timer a atteint zéro (fin du jeu)
         if (temps <= 0 && !this.gameEnded) {
             this.gameEnded = true;
@@ -320,7 +332,7 @@ class Game {
     nextLevel(goToNext, levelNumber) {
         const targetLevel = goToNext ? levelNumber + 1 : Math.max(1, levelNumber - 1);
         window.location.href = `jeu.html?niveau=${targetLevel}`;
-    }
+      }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
