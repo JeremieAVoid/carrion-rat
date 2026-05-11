@@ -3,6 +3,8 @@ class Game {
         this.canvas = canvas;
         this.ctx = ctx;
  
+        this.animationId = null;
+
         this.bgImg = new Image();
         this.bgImg.src = "images/horror_level.png";
  
@@ -108,6 +110,20 @@ class Game {
         this.currentLevel = level;
         this.resetLevel(level);
         window.restartTimer();
+        const musicJeu = document.getElementById("musicJeu");
+        if (musicJeu) {
+            musicJeu.currentTime = 0;
+            musicJeu.volume = 0.1;
+            musicJeu.play();
+        }
+
+        const ambianceJeu = document.getElementById("ambianceJeu");
+        if (ambianceJeu) {
+            ambianceJeu.currentTime = 0;
+            ambianceJeu.volume = 0.6;
+            ambianceJeu.play();
+        }
+
         this.startLoop();
     }
  
@@ -123,8 +139,11 @@ class Game {
     }
  
     startLoop() {
+        if (this.animationId) {
+            cancelAnimationFrame(this.animationId); // ← ajout
+        }
         this.lastTime = null;
-        requestAnimationFrame(this.gameLoop.bind(this));
+        this.animationId = requestAnimationFrame(this.gameLoop.bind(this)); // ← ajout animationId
     }
  
     togglePause() {
@@ -266,7 +285,7 @@ class Game {
  
         this.update(deltaTime);
         this.draw();
-        requestAnimationFrame(this.gameLoop.bind(this));
+        this.animationId = requestAnimationFrame(this.gameLoop.bind(this)); // ← ajout animationId
     }
  
     draw() {
@@ -289,13 +308,15 @@ class Game {
         this.ctx.fillStyle = '#000000';
         this.ctx.fillRect(0, this.canvas.height - 20, this.canvas.width, 20);
         this.ctx.fillRect(0, 0, this.canvas.width, 20);
- 
+
+    if (!this.gameOver) {
         this.frameTimer++;
         if (this.frameTimer >= this.frameInterval) {
             this.currentFrame = (this.currentFrame + 1) % this.ratFrames.length;
             this.frameTimer = 0;
         }
- 
+    }
+
         this.ctx.drawImage(
             this.ratFrames[this.currentFrame],
             this.player.getPosX(),
@@ -338,20 +359,25 @@ class Game {
         this.ctx.font = '24px Arial';
         this.ctx.textAlign = 'left';
         this.ctx.fillText(`Score : ${this.currentLev.score}`, 20, 40);
- 
-        if (this.gameOver) {
-            this.ctx.fillStyle = 'rgba(0,0,0,0.6)';
-            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-            this.ctx.fillStyle = 'white';
-            this.ctx.font = '60px Arial';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillText('GAME OVER', this.canvas.width / 2, this.canvas.height / 2);
-            this.ctx.font = '30px Arial';
-            this.ctx.fillText(`Score final : ${this.currentLev.score}`, this.canvas.width / 2, this.canvas.height / 2 + 60);
-            this.ctx.font = '20px Arial';
-            this.ctx.fillText('Appuyez sur ESPACE pour recommencer le niveau', this.canvas.width / 2, this.canvas.height / 2 + 100);
-            this.ctx.fillText('Appuyez sur M pour retourner au menu', this.canvas.width / 2, this.canvas.height / 2 + 130);
-        }
+
+    if (this.gameOver) {
+        this.ctx.fillStyle = 'rgba(77, 38, 22, 0.4)';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        this.ctx.fillStyle = '#a9301d97';
+        this.ctx.font = 'bold 70px "Courier New"';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText('☠ GAME OVER ☠', this.canvas.width / 2, this.canvas.height / 2 - 20);
+
+        this.ctx.fillStyle = '#ff2d2dca';
+        this.ctx.font = '28px "Courier New"';
+        this.ctx.fillText(`Score final : ${this.currentLev.score}`, this.canvas.width / 2, this.canvas.height / 2 + 50);
+
+        this.ctx.fillStyle = '#888';
+        this.ctx.font = '18px "Courier New"';
+        this.ctx.fillText('[ ESPACE ] Recommencer', this.canvas.width / 2, this.canvas.height / 2 + 100);
+        this.ctx.fillText('[ M ] Menu principal', this.canvas.width / 2, this.canvas.height / 2 + 130);
+    }
     }
  
     attachControls() {
@@ -437,8 +463,8 @@ class Game {
 window.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
-    const game = new Game(canvas, ctx);
-    game.init().catch(error => {
+    window.game = new Game(canvas, ctx); // ← window.game
+    window.game.init().catch(error => {
         console.error('Erreur lors du chargement du jeu :', error);
     });
 });
