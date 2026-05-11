@@ -1,3 +1,5 @@
+const musicAccueil = document.getElementById("musicAccueil");
+musicAccueil.play();
 
 function nouvellePartie() {
     window.location.href = 'jeu.html?niveau=1';
