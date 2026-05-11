@@ -69,19 +69,4 @@ function draw() {
     ctx.fillStyle = "white";
     ctx.font = "24px Arial";
     ctx.fillText("Score : " + currentLev.score, 20, 40);
-
-    // Game Over
-    if (gameOver) {
-        ctx.fillStyle = "rgba(0,0,0,0.6)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "white";
-        ctx.font = "60px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2);
-        ctx.font = "30px Arial";
-        ctx.fillText("Score final : " + currentLev.score, canvas.width / 2, canvas.height / 2 + 60);
-        ctx.font = "20px Arial";
-        ctx.fillText("Appuyez sur ESPACE pour recommencer le niveau", canvas.width / 2, canvas.height / 2 + 100);
-        ctx.fillText("Appuyez sur M pour retourner au menu", canvas.width / 2, canvas.height / 2 + 130);
-    }
 }
