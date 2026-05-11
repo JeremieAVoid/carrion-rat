@@ -309,9 +309,8 @@ class Game {
 window.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
-    const game = new Game(canvas, ctx);
-    game.init().catch(error => {
+    window.game = new Game(canvas, ctx); // ← window.game
+    window.game.init().catch(error => {
         console.error('Erreur lors du chargement du jeu :', error);
     });
 });
-
