@@ -1,0 +1,75 @@
+* {
+    margin : 0;
+    padding : 0;
+} 
+
+body {
+    background-color: #0a0a0a;
+    color : #e8e8e8;
+    font-family: 'Georgia', sans-serif;
+    background: 
+    radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.9) 90%),
+    linear-gradient(rgba(60,0,0,0.5), rgba(20,0,0,0.7)),
+    url('image.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+} 
+
+
+.présentation {
+    width: 100%;
+    padding: 40px 40px 1px 40px;
+    display : flex; 
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+}
+.présentation h1, h2, h3{
+    color:brown;
+}
+
+.titre {
+  font-family: "Creepster", system-ui;
+  font-weight: 400;
+  font-style: normal;
+  padding-top: 0px;
+  color: #8b0000;
+  font-size: 4rem;
+  text-transform: uppercase;
+  margin-top: 50px;
+
+  text-shadow: 
+  3px 3px 0px #000,
+  0 0 10px #ff0000,
+  0 0 25px rgba(255, 0, 0, 0.5);
+
+  background: 
+  linear-gradient(to bottom, #ff3333, #660000);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 15px rgba(0,0,0,0.8))
+}
+.contenu1, .contenu2, .contenu3, .contenu4 {
+    display: flex;
+    justify-content: center;
+    gap : 20px;
+    padding: 40px
+}
+.objectif, .commandes, .gameplay, .obstacles, .conditions, .conseils, .menace, .progression{
+    width: 400px;
+    border: 1px solid #8b0000;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+} 
+
+.footer {
+    text-align: center;
+
+}
+
+
+
+
