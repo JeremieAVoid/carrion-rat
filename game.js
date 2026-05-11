@@ -2,14 +2,14 @@ class Game {
     constructor(canvas, ctx) {
         this.canvas = canvas;
         this.ctx = ctx;
-
+ 
         this.bgImg = new Image();
         this.bgImg.src = "images/horror_level.png";
-
+ 
         this.ratFrames = [];
         this.obstacleTopImgs = [];
         this.obstacleBottomImgs = [];
-
+ 
         this.currentFrame = 0;
         this.frameTimer = 0;
         this.frameInterval = 40;
@@ -28,10 +28,14 @@ class Game {
             this.pancarteCharge = true;
         };
         this.lastTime = null;
-
+ 
         this.isBreak = false;
+        
+        this.isPaused = false;
+        this.pauseButton = null;
+        this.pauseOverlay = null;
     }
-
+ 
     loadImage(src) {
         return new Promise((resolve, reject) => {
             const img = new Image();
@@ -40,7 +44,7 @@ class Game {
             img.onerror = () => reject(new Error(`Image introuvable : ${src}`));
         });
     }
-
+ 
     async loadAssets() {
         const topSrc = [
             "images/obstacles_top_evil.png",
@@ -57,29 +61,29 @@ class Game {
             "images/rat_evil_1.png",
             "images/rat_evil_2.png"
         ];
-
+ 
         const promises = [];
         promises.push(this.loadImage(this.bgImg.src).then(img => { this.bgImg = img; }));
-
+ 
         for (const src of topSrc) {
             promises.push(this.loadImage(src).then(img => this.obstacleTopImgs.push(img)));
         }
-
+ 
         for (const src of bottomSrc) {
             promises.push(this.loadImage(src).then(img => this.obstacleBottomImgs.push(img)));
         }
         for (const src of ratSrc) {
             promises.push(this.loadImage(src).then(img => this.ratFrames.push(img)));
         }
-
+ 
         await Promise.all(promises);
     }
-
+ 
     resizeCanvas() {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
     }
-
+ 
     resetLevel(level) {
         this.currentLev = new Level(level);
         this.player = new Rat(100, this.canvas.height / 2, 100, 150);
@@ -92,87 +96,156 @@ class Game {
         this.lastTime = null;
         this.currentFrame = 0;
         this.frameTimer = 0;
+        this.isPaused = false;
     }
-
+ 
     loadSavedLevel() {
         const sauvegarde = charger();
         return sauvegarde ? sauvegarde.currentLevel : null;
     }
-
+ 
     startLevel(level) {
         this.currentLevel = level;
         this.resetLevel(level);
+        window.restartTimer();
         this.startLoop();
     }
-
+ 
     breakGame(){
         if (this.isBreak) {this.isBreak = true;}
-        else {this.isBreak = false}
+        else {this.isBreak = false;}
         return this.update(this.lastTime,this.isBreak);
     }
-
+ 
     restartGame(){
+        window.restartTimer();
         requestAnimationFrame(this.gameLoop.bind(this));
     }
-
+ 
     startLoop() {
         this.lastTime = null;
         requestAnimationFrame(this.gameLoop.bind(this));
     }
-
-    update(deltaTime,b = false) {
+ 
+    togglePause() {
+        this.isPaused = !this.isPaused;
+        this.updatePauseUI();
+        
+        if (this.isPaused) {
+            // Pause timer global
+            if (window.pauseTimer) {
+                window.pauseTimer();
+            }
+        } else {
+            // Reprend timer
+            if (window.resumeTimer) {
+                window.resumeTimer();
+            }
+        }
+    }
+ 
+    updatePauseUI() {
+        if (!this.pauseOverlay) {
+            this.pauseOverlay = document.createElement('div');
+            this.pauseOverlay.id = 'pauseOverlay';
+            this.pauseOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                display: none;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                font-family: Arial, sans-serif;
+            `;
+            
+            const pauseText = document.createElement('div');
+            pauseText.id = 'pauseText';
+            pauseText.style.cssText = `
+                color: white;
+                font-size: 48px;
+                font-weight: bold;
+                text-align: center;
+            `;
+            pauseText.innerHTML = `
+                <div style="margin-bottom: 30px;">PAUSE</div>
+                <div style="font-size: 20px; margin-bottom: 20px;">Le jeu est en pause</div>
+                <div style="font-size: 16px;">Appuyez sur P ou cliquez sur le bouton pour reprendre</div>
+            `;
+            
+            this.pauseOverlay.appendChild(pauseText);
+            document.body.appendChild(this.pauseOverlay);
+        }
+        
+        // Affiche ou cache l'overlay
+        this.pauseOverlay.style.display = this.isPaused ? 'flex' : 'none';
+        
+        // Change le texte du bouton
+        if (this.pauseButton) {
+            this.pauseButton.textContent = this.isPaused ? 'Reprendre' : 'Pause';
+        }
+    }
+ 
+    update(deltaTime, b = false) {
         if (this.gameOver) return;
-        if (b) return ;
-        // Vérifier si le timer a atteint zéro (fin du jeu)
-        if (temps <= 0 && !this.gameEnded) {
+        if (b) return;
+    
+        if (this.isPaused) return;
+
+        // Utiliser la variable globale temps du timer
+        if (window.getTemps && window.getTemps() <= 0 && !this.gameEnded) {
             this.gameEnded = true;
         }
-
+ 
         this.player.velocityY += this.player.getGravity() * deltaTime;
         this.player.posY += this.player.velocityY * deltaTime;
-
+ 
         const ground = this.canvas.height - 20;
         if (this.player.getPosY() + this.player.getHeight() > ground) {
             this.player.setPosY(ground - this.player.getHeight());
             this.player.velocityY = 0;
         }
-
+ 
         const ceiling = 20;
         if (this.player.getPosY() <= ceiling) {
             this.player.setPosY(ceiling);
             this.player.velocityY = 0;
         }
-
+ 
         for (let i = this.obstaclesTop.length - 1; i >= 0; i--) {
             const obstacleTop = this.obstaclesTop[i];
             const obstacleBottom = this.obstaclesBottom[i];
-
+ 
             obstacleTop.shift(deltaTime);
             obstacleBottom.shift(deltaTime);
-
+ 
             if (obstacleTop.getPosX() + obstacleTop.getWidth() < 0 && obstacleBottom.getPosX() + obstacleBottom.getWidth() < 0) {
                 this.obstaclesTop.splice(i, 1);
                 this.obstaclesBottom.splice(i, 1);
                 continue;
             }
-
+ 
             if (obstacleTop.getPosX() + obstacleTop.getWidth() < this.player.getPosX() && !obstacleTop.passed) {
                 obstacleTop.passed = true;
                 this.currentLev.score += 1;
             }
-
+ 
             if (this.player.obstacle(obstacleTop) || this.player.obstacle(obstacleBottom)) {
                 this.gameOver = true;
+                window.pauseTimer()
                 sauvegarder(this.currentLev.intensity, this.currentLev.score);
             }
         }
-
+ 
         // Arrêter la génération d'obstacles si le jeu est terminé
         if (!this.gameEnded && (this.obstaclesTop.length === 0 || this.obstaclesBottom.length === 0)) {
             this.obstaclesBottom = this.currentLev.obstaclesBottom(this.canvas.width, this.canvas.height);
             this.obstaclesTop = this.currentLev.obstaclesTop(this.canvas.width, this.canvas.height);
         }
-
+ 
         if (this.gameEnded && !this.pancarte && this.obstaclesTop.length === 0 && this.obstaclesBottom.length === 0) {
             this.pancarte = true;
             if (!this.pancarteTimerStarted) {
@@ -183,23 +256,23 @@ class Game {
             }
         }
     }
-
+ 
     gameLoop(timestamp) {
         if (this.lastTime === null) {
             this.lastTime = timestamp;
         }
         const deltaTime = Math.min((timestamp - this.lastTime) / 1000, 0.05);
         this.lastTime = timestamp;
-
+ 
         this.update(deltaTime);
         this.draw();
         requestAnimationFrame(this.gameLoop.bind(this));
     }
-
+ 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.drawImage(this.bgImg, 0, 0, this.canvas.width, this.canvas.height);
-
+ 
         this.ctx.save();
         const time = Date.now() / 1000;
         for (let i = 0; i < 5; i++) {
@@ -212,17 +285,17 @@ class Game {
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         }
         this.ctx.restore();
-
+ 
         this.ctx.fillStyle = '#000000';
         this.ctx.fillRect(0, this.canvas.height - 20, this.canvas.width, 20);
         this.ctx.fillRect(0, 0, this.canvas.width, 20);
-
+ 
         this.frameTimer++;
         if (this.frameTimer >= this.frameInterval) {
             this.currentFrame = (this.currentFrame + 1) % this.ratFrames.length;
             this.frameTimer = 0;
         }
-
+ 
         this.ctx.drawImage(
             this.ratFrames[this.currentFrame],
             this.player.getPosX(),
@@ -230,7 +303,7 @@ class Game {
             this.player.getWidth(),
             this.player.getHeight()
         );
-
+ 
         for (const obstacle of this.obstaclesTop) {
             this.ctx.drawImage(
                 this.obstacleTopImgs[obstacle.imgIndex],
@@ -240,7 +313,7 @@ class Game {
                 obstacle.getHeight()
             );
         }
-
+ 
         for (const obstacle of this.obstaclesBottom) {
             this.ctx.drawImage(
                 this.obstacleBottomImgs[obstacle.imgIndex],
@@ -250,7 +323,7 @@ class Game {
                 obstacle.getHeight()
             );
         }
-
+ 
         if (this.pancarte && this.pancarteCharge) {
             const groundY = this.canvas.height - 20;
             const ratio = (this.player.getWidth() * 1.2) / this.pancarteImg.width;
@@ -260,12 +333,12 @@ class Game {
             const signY = groundY - signHeight;
             this.ctx.drawImage(this.pancarteImg, signX, signY, signWidth, signHeight);
         }
-
+ 
         this.ctx.fillStyle = 'white';
         this.ctx.font = '24px Arial';
         this.ctx.textAlign = 'left';
         this.ctx.fillText(`Score : ${this.currentLev.score}`, 20, 40);
-
+ 
         if (this.gameOver) {
             this.ctx.fillStyle = 'rgba(0,0,0,0.6)';
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -280,13 +353,19 @@ class Game {
             this.ctx.fillText('Appuyez sur M pour retourner au menu', this.canvas.width / 2, this.canvas.height / 2 + 130);
         }
     }
-
+ 
     attachControls() {
         window.addEventListener('keydown', (e) => {
+            if (e.code === 'KeyP') {
+                if (!this.gameOver && !this.gameEnded) {
+                    this.togglePause();
+                }
+            }
+            
             if (e.code === 'Space') {
                 if (this.gameOver) {
                     this.startLevel(this.currentLevel);
-                } else {
+                } else if (!this.isPaused) {
                     this.player.jump();
                 }
             }
@@ -294,26 +373,46 @@ class Game {
                 window.location.href = 'index.html';
             }
         });
-
+ 
         window.addEventListener('mousedown', () => {
             if (this.gameOver) {
                 this.startLevel(this.currentLevel);
-            } else {
+            } else if (!this.isPaused) {
                 this.player.jump();
             }
         });
+        
+        this.pauseButton = document.getElementById('pauseButton');
+        if (this.pauseButton) {
+            
+            this.pauseButton.addEventListener('click', () => {
+                if (!this.gameOver && !this.gameEnded) {
+                    this.togglePause();
+                }
+            });
+            
+            this.pauseButton.addEventListener('mouseover', () => {
+                this.pauseButton.style.background = 'rgba(200, 50, 50, 1)';
+                this.pauseButton.style.transform = 'scale(1.05)';
+            });
+            
+            this.pauseButton.addEventListener('mouseout', () => {
+                this.pauseButton.style.background = 'rgba(200, 50, 50, 0.8)';
+                this.pauseButton.style.transform = 'scale(1)';
+            });
+        }
     }
-
+ 
     async init() {
         this.resizeCanvas();
         window.addEventListener('resize', () => this.resizeCanvas());
         this.attachControls();
         await this.loadAssets();
-
+ 
         const urlParams = new URLSearchParams(window.location.search);
         const action = urlParams.get('action');
         const niveau = urlParams.get('niveau');
-
+ 
         if (action === 'reprendre') {
             const savedLevel = this.loadSavedLevel();
             if (savedLevel !== null) {
@@ -324,17 +423,17 @@ class Game {
             }
             return;
         }
-
+ 
         const level = niveau ? parseInt(niveau, 10) : 1;
         this.startLevel(level);
     }
-
+ 
     nextLevel(goToNext, levelNumber) {
         const targetLevel = goToNext ? levelNumber + 1 : Math.max(1, levelNumber - 1);
         window.location.href = `jeu.html?niveau=${targetLevel}`;
       }
 }
-
+ 
 window.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
@@ -343,4 +442,3 @@ window.addEventListener('DOMContentLoaded', () => {
         console.error('Erreur lors du chargement du jeu :', error);
     });
 });
-
