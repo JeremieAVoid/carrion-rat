@@ -215,7 +215,7 @@ class Game {
         if (this.isPaused) return;
 
         // Utiliser la variable globale temps du timer
-        if (window.getTemps && window.getTemps() <= 0 && !this.gameEnded) {
+        if (window.getTemps() <= 0 && !this.gameEnded) {
             this.gameEnded = true;
         }
  
@@ -258,8 +258,8 @@ class Game {
                 sauvegarder(this.currentLev.intensity, this.currentLev.score);
             }
         }
- 
-        // Arrêter la génération d'obstacles si le jeu est terminé
+
+        // Tant que jeu non fini, continuer génération
         if (!this.gameEnded && (this.obstaclesTop.length === 0 || this.obstaclesBottom.length === 0)) {
             this.obstaclesBottom = this.currentLev.obstaclesBottom(this.canvas.width, this.canvas.height);
             this.obstaclesTop = this.currentLev.obstaclesTop(this.canvas.width, this.canvas.height);

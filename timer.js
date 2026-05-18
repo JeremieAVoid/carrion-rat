@@ -32,6 +32,10 @@ window.resumeTimer = function() {
     timerPaused = false;
 };
 
+window.getTemps = function() {
+    return temps;
+};
+
 window.restartTimer = function() {
     clearInterval(timerInterval);
     timerInterval = null;
