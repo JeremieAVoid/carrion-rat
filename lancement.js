@@ -1,7 +1,6 @@
 function start(n){
     let gameStarted = true;
     let currentLevel = n;
-
     const bgImg = new Image();
     bgImg.src = "images/horror_level.png"; 
     const canvas = document.getElementById("gameCanvas");
