@@ -2,6 +2,11 @@
 function sauvegarder(niveau, score) {
     const currentData = charger() 
 
+    let niveauFinalDébloqué = currentData.unlockedLevel
+    if(!niveauFinalDébloqué.includes(niveau + 1) && niveau + 1 <= 6) {
+        niveauFinalDébloqué.push(niveau + 1)
+    }
+
     let scoreFinal = currentData.bestScore
     if(score > scoreFinal) {
         scoreFinal = score
@@ -13,8 +18,9 @@ function sauvegarder(niveau, score) {
     }
 
     const progress = {
-        currentLevel : niveauFinal,
-        bestScore : scoreFinal
+        unlockedLevel : niveauFinalDébloqué,
+        bestScore : scoreFinal, 
+        currentLevel : niveauFinal
     }
     localStorage.setItem("gameProgress", JSON.stringify(progress)); 
 }
@@ -28,6 +34,7 @@ function charger() {
     } else {
         return {
             currentLevel : 1,
+            unlockedLevel : [1],
             bestScore: 0
         }
     }
