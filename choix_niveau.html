@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 <html lang="fr">
-
+ 
 <head>
     <meta charset="UTF-8">
     <title>Choix du niveau - Carrion Rat</title>
     <link rel="stylesheet" href="choix_niv.css">
     <link rel="icon" href="images/rat.png" type="image/x-icon">
 </head>
-
+ 
 <body>
     <div class="choice-screen">
         <h1>Choisir le niveau</h1>
-        <button id="heaven3" class="menuBtn" onclick="window.location.href='jeu.html?niveau=1'">Niveau -3</button>
-        <button id="heaven2" class="menuBtn" onclick="window.location.href='jeu.html?niveau=2'">Niveau -2</button>
-        <button id="heaven1" class="menuBtn" onclick="window.location.href='jeu.html?niveau=3'">Niveau -1</button>
-        <button id="classic1" class="menuBtn" onclick="window.location.href='jeu.html?niveau=4'">Niveau 1</button>
-        <button id="classic2" class="menuBtn" onclick="window.location.href='jeu.html?niveau=5'">Niveau 2</button>
-        <button id="classic3" class="menuBtn" onclick="window.location.href='jeu.html?niveau=6'">Niveau 3</button>
-        <button id="hell1" class="menuBtn" onclick="window.location.href='jeu.html?niveau=7'">Niveau 4</button>
-        <button id="hell2" class="menuBtn" onclick="window.location.href='jeu.html?niveau=8'">Niveau 5</button>
-        <button id="hell3" class="menuBtn" onclick="window.location.href='jeu.html?niveau=9'">Niveau 6</button>
+        <button id="heaven3" class="menuBtn" onclick="window.location.href='jeu.html?niveau=heaven3'">Heaven 3</button>
+        <button id="heaven2" class="menuBtn" onclick="window.location.href='jeu.html?niveau=heaven2'">Heaven 2</button>
+        <button id="heaven1" class="menuBtn" onclick="window.location.href='jeu.html?niveau=heaven1'">Heaven 1</button>
+        <button id="classic1" class="menuBtn" onclick="window.location.href='jeu.html?niveau=classic1'">Classic 1</button>
+        <button id="classic2" class="menuBtn" onclick="window.location.href='jeu.html?niveau=classic2'">Classic 2</button>
+        <button id="classic3" class="menuBtn" onclick="window.location.href='jeu.html?niveau=classic3'">Classic 3</button>
+        <button id="hell1" class="menuBtn" onclick="window.location.href='jeu.html?niveau=hell1'">Hell 1</button>
+        <button id="hell2" class="menuBtn" onclick="window.location.href='jeu.html?niveau=hell2'">Hell 2</button>
+        <button id="hell3" class="menuBtn" onclick="window.location.href='jeu.html?niveau=hell3'">Hell 3</button>
         <button class="menuBtn" style="background: #555;" onclick="window.location.href='index.html'">← Retour au menu</button>
     </div>
+    <script src="donnees.js"></script>
+    <script src="hideLevel.js"></script>
 </body>
 </html>
