@@ -87,7 +87,10 @@ class Game {
     }
  
     resetLevel(level) {
-        this.currentLev = new Level(level);
+        const difficulty = getDifficulty(level);
+
+        this.currentLev = new Level(difficulty);
+        
         this.player = new Rat(100, this.canvas.height / 2, 100, 150);
         this.obstaclesBottom = this.currentLev.obstaclesBottom(this.canvas.width, this.canvas.height);
         this.obstaclesTop = this.currentLev.obstaclesTop(this.canvas.width, this.canvas.height);
@@ -140,10 +143,10 @@ class Game {
  
     startLoop() {
         if (this.animationId) {
-            cancelAnimationFrame(this.animationId); // ← ajout
+            cancelAnimationFrame(this.animationId);
         }
         this.lastTime = null;
-        this.animationId = requestAnimationFrame(this.gameLoop.bind(this)); // ← ajout animationId
+        this.animationId = requestAnimationFrame(this.gameLoop.bind(this));
     }
  
     togglePause() {
@@ -215,7 +218,7 @@ class Game {
         if (this.isPaused) return;
 
         // Utiliser la variable globale temps du timer
-        if (window.getTemps && window.getTemps() <= 0 && !this.gameEnded) {
+        if (window.getTemps() <= 0 && !this.gameEnded) {
             this.gameEnded = true;
         }
  
@@ -258,19 +261,25 @@ class Game {
                 sauvegarder(this.currentLev.intensity, this.currentLev.score);
             }
         }
- 
-        // Arrêter la génération d'obstacles si le jeu est terminé
+
+        // Tant que jeu non fini, continuer génération
         if (!this.gameEnded && (this.obstaclesTop.length === 0 || this.obstaclesBottom.length === 0)) {
             this.obstaclesBottom = this.currentLev.obstaclesBottom(this.canvas.width, this.canvas.height);
             this.obstaclesTop = this.currentLev.obstaclesTop(this.canvas.width, this.canvas.height);
         }
- 
+
         if (this.gameEnded && !this.pancarte && this.obstaclesTop.length === 0 && this.obstaclesBottom.length === 0) {
             this.pancarte = true;
             if (!this.pancarteTimerStarted) {
                 this.pancarteTimerStarted = true;
+                
+                const goToNext = isGoHell(this.player);
+                const targetLevel = goToNext ? this.currentLevel + 1 : Math.max(1, this.currentLevel - 1);
+                
+                sauvegarder(targetLevel, this.currentLev.score);
+
                 setTimeout(() => {
-                    this.nextLevel(isGoHell(this.player), this.currentLevel);
+                    this.nextLevel(goToNext, this.currentLevel);
                 }, 1500);
             }
         }
@@ -450,14 +459,42 @@ class Game {
             return;
         }
  
-        const level = niveau ? parseInt(niveau, 10) : 1;
-        this.startLevel(level);
+        let levelId = 4; 
+        if (niveau) {
+            if (!isNaN(niveau)) {
+                levelId = parseInt(niveau, 10);
+            } else if (LEVELS_MAP[niveau]) {
+                levelId = LEVELS_MAP[niveau].id;
+            }
+        }
+        this.startLevel(levelId);
     }
  
     nextLevel(goToNext, levelNumber) {
-        const targetLevel = goToNext ? levelNumber + 1 : Math.max(1, levelNumber - 1);
-        window.location.href = `jeu.html?niveau=${targetLevel}`;
-      }
+        let goHell = true;
+        if (typeof isGoHell === 'function' && this.player) {
+            goHell = isGoHell(this.player);
+        }
+        let targetLevelId = levelNumber;
+        if (goHell) {
+            targetLevelId = levelNumber + 1;
+        } else {
+            targetLevelId = levelNumber - 1;
+        }
+        targetLevelId = Math.max(1, Math.min(9, targetLevelId));
+        let targetLevelKey = "classic1";
+        for (let key in LEVELS_MAP) {
+            if (LEVELS_MAP[key].id === targetLevelId) {
+                targetLevelKey = key;
+                break;
+            }
+        }
+        if (typeof sauvegarder === 'function') {
+            const score = this.currentLev ? this.currentLev.score : 0;
+            sauvegarder(targetLevelKey, score);
+        }
+        window.location.href = `jeu.html?niveau=${targetLevelKey}`;
+    }
 }
  
 window.addEventListener('DOMContentLoaded', () => {

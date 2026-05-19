@@ -1,3 +1,5 @@
+let levelComplete = false;
+
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -44,31 +46,48 @@ function draw() {
         player.getHeight()
     );
 
-    // Obstacles
-    for (const obstacle of obstaclesTop) {
-        ctx.drawImage(
-            obstacleTopImgs[obstacle.imgIndex],
-            obstacle.getPosX(),
-            obstacle.getPosY(),
-            obstacle.getWidth(),
-            obstacle.getHeight()
-        );
-    }
+    if (temps > 0) {
+        for (const obstacle of obstaclesTop) {
+            ctx.drawImage(
+                obstacleTopImgs[obstacle.imgIndex],
+                obstacle.getPosX(),
+                obstacle.getPosY(),
+                obstacle.getWidth(),
+                obstacle.getHeight()
+            );
+        }
 
-    for (const obstacle of obstaclesBottom) {
-        ctx.drawImage(
-            obstacleBottomImgs[obstacle.imgIndex],
-            obstacle.getPosX(),
-            obstacle.getPosY(),
-            obstacle.getWidth(),
-            obstacle.getHeight()
-        );
+        for (const obstacle of obstaclesBottom) {
+            ctx.drawImage(
+                obstacleBottomImgs[obstacle.imgIndex],
+                obstacle.getPosX(),
+                obstacle.getPosY(),
+                obstacle.getWidth(),
+                obstacle.getHeight()
+            );
+        }
     }
 
     // Score
     ctx.fillStyle = "white";
     ctx.font = "24px Arial";
     ctx.fillText("Score : " + currentLev.score, 20, 40);
+
+    // Affichage si le niveau est complété
+    if (levelComplete && temps <= 0) {
+        ctx.fillStyle = "rgba(0,0,0,0.6)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#00ff00";
+        ctx.font = "60px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("NIVEAU COMPLÉTÉ !", canvas.width / 2, canvas.height / 2);
+        ctx.fillStyle = "white";
+        ctx.font = "30px Arial";
+        ctx.fillText("Score : " + currentLev.score, canvas.width / 2, canvas.height / 2 + 60);
+        ctx.font = "20px Arial";
+        ctx.fillText("Appuyez sur ESPACE pour continuer", canvas.width / 2, canvas.height / 2 + 100);
+        ctx.fillText("Appuyez sur M pour retourner au menu", canvas.width / 2, canvas.height / 2 + 130);
+    }
 
     // Game Over
     if (gameOver) {

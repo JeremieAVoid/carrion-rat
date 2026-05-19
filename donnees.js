@@ -1,27 +1,48 @@
+const LEVELS_MAP = {
+    "heaven3": { id: 1, difficulty: 1 },
+    "heaven2": { id: 2, difficulty: 3 },
+    "heaven1": { id: 3, difficulty: 5 },
+    "classic1": { id: 4, difficulty: 6 },
+    "classic2": { id: 5, difficulty: 7 },
+    "classic3": { id: 6, difficulty: 8 },
+    "hell1": { id: 7, difficulty: 10 },
+    "hell2": { id: 8, difficulty: 12 },
+    "hell3": { id: 9, difficulty: 15 }
+};
+
 // cette fonction permet de sauvegarder la progression du joueur 
 function sauvegarder(niveau, score) {
-    const currentData = charger() 
+    const currentData = charger();
 
-    let niveauFinalDébloqué = currentData.unlockedLevel
-    if(!niveauFinalDébloqué.includes(niveau + 1) && niveau + 1 <= 6) {
-        niveauFinalDébloqué.push(niveau + 1)
+    let niveauFinalDébloqué = currentData.unlockedLevel || [4]; 
+    
+    let levelData = LEVELS_MAP[niveau] || LEVELS_MAP["classic1"];
+    let idNiveauActuel = levelData.id;
+    let difficultyActuelle = levelData.difficulty;
+
+    if (idNiveauActuel > 0 && !niveauFinalDébloqué.includes(idNiveauActuel)) {
+        niveauFinalDébloqué.push(idNiveauActuel);
+        niveauFinalDébloqué.sort((a, b) => a - b); 
     }
 
-    let scoreFinal = currentData.bestScore
-    if(score > scoreFinal) {
-        scoreFinal = score
+    let scoreFinal = currentData.bestScore || 0;
+    if (score > scoreFinal) {
+        scoreFinal = score;
     } 
 
-    let niveauFinal = currentData.currentLevel 
-    if(niveau > niveauFinal) {
-        niveauFinal = niveau
+    let niveauStocke = currentData.currentLevel || 4;
+    let idNiveauFinal = niveauStocke;
+
+    if (idNiveauActuel > idNiveauFinal) {
+        idNiveauFinal = idNiveauActuel;
     }
 
     const progress = {
-        unlockedLevel : niveauFinalDébloqué,
-        bestScore : scoreFinal, 
-        currentLevel : niveauFinal
-    }
+        unlockedLevel: niveauFinalDébloqué,
+        bestScore: scoreFinal, 
+        currentLevel: idNiveauFinal
+    };
+
     localStorage.setItem("gameProgress", JSON.stringify(progress)); 
 }
 
@@ -33,8 +54,8 @@ function charger() {
         return dataLocal
     } else {
         return {
-            currentLevel : 1,
-            unlockedLevel : [1],
+            currentLevel : 4,
+            unlockedLevel : [4],
             bestScore: 0
         }
     }
@@ -44,4 +65,21 @@ function charger() {
 function supprimer() {
     localStorage.removeItem("gameProgress");
     localStorage.clear();
+}
+
+function getDifficulty(niveau) {
+    if (typeof niveau === 'number') {
+        for (let key in LEVELS_MAP) {
+            if (LEVELS_MAP[key].id === niveau) {
+                return LEVELS_MAP[key].difficulty;
+            }
+        }
+        return 6;
+    } else {
+        return LEVELS_MAP[niveau]?.difficulty || 6;
+    }
+}
+
+function getLevelId(levelName) {
+    return LEVELS_MAP[levelName]?.id || 4;
 }

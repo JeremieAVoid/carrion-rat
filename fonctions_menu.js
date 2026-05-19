@@ -2,13 +2,14 @@ const musicAccueil = document.getElementById("musicAccueil");
 musicAccueil.play();
 
 function nouvellePartie() {
-    window.location.href = 'jeu.html?niveau=1';
+    window.location.href = 'jeu.html?niveau=classic1';
 }
 
 function reprendrePartie() {
     const sauvegarde = localStorage.getItem("gameProgress");
     if (sauvegarde) {
-        window.location.href = 'jeu.html?action=reprendre';
+        const data = JSON.parse(sauvegarde);
+        window.location.href = `jeu.html?action=reprendre`;
     } else {
         alert("Aucune partie sauvegardée !");
     }
