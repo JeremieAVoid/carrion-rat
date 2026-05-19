@@ -70,6 +70,15 @@ body {
 
 }
 
-
-
-
+.menuBtn {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #4a0000;
+    color: #ffcccc;
+    border: 2px solid #990000;
+    border-radius: 4px;
+    font-size: 1.2rem;
+    font-family: inherit;
+    cursor: pointer;
+}
