@@ -10,28 +10,28 @@
 </head>
 
 <body>
-<audio id="musicAccueil" src="music/accueil_sound.mp3" loop></audio>
+    <audio id="musicAccueil" src="music/accueil_sound.mp3" loop></audio>
 
-<div id="menuScreen">
-<div class="titre" style="position: relative; width: 800px; margin-bottom: 50px;">
-    <img src="images/titre_jeu.png" alt="Carrion Rat" style="width: 800px; height: auto;">
-    <canvas id="ratCanvas"></canvas>
-</div>
-    
-<button class="menuBtn" onclick="nouvellePartie()">
-    <img src="images/new_game.png" alt="Nouvelle Partie">
-</button>
-<button class="menuBtn" onclick="reprendrePartie()">
-    <img src="images/reprendre.png" alt="Reprendre">
-</button>
-<button class="menuBtn" onclick="choixNiveau()">
-    <img src="images/level_choice.png" alt="Choix du Niveau">
-</button>
+    <div id="menuScreen">
+    <div class="titre" style="position: relative; width: 800px; margin-bottom: 50px;">
+        <img src="images/titre_jeu.png" alt="Carrion Rat" style="width: 800px; height: auto;">
+        <canvas id="ratCanvas"></canvas>
+    </div>
+        
+    <button class="menuBtn" onclick="nouvellePartie()">
+        <img src="images/new_game.png" alt="Nouvelle Partie">
+    </button>
+    <button class="menuBtn" onclick="reprendrePartie()">
+        <img src="images/reprendre.png" alt="Reprendre">
+    </button>
+    <button class="menuBtn" onclick="choixNiveau()">
+        <img src="images/level_choice.png" alt="Choix du Niveau">
+    </button>
 
-<button class="menuBtn" onclick = "window.open('regles.html', 'blank')">
-    <img src="images/règle.png" alt="Règle du jeu">
-</button>
-</div>
+    <button class="menuBtn" onclick = "window.open('regles.html', 'blank')">
+        <img src="images/règle.png" alt="Règle du jeu">
+    </button>
+    </div>
     <script src="donnees.js"></script>
     <script src="fonctions_menu.js"></script>
     <script src="menuRat.js"></script>

@@ -4,15 +4,13 @@ class Level {
     space = 0;
     constructor(intensity) {
         this.intensity = intensity;
-        // Adapter l'espace en fonction de la difficulté
-        // Moins d'espace = plus difficile
-        this.space = Math.max(80, 250 - this.intensity * 10);
+        this.space = Math.max(80, 250 - this.intensity * 5);
     }
 
     obstaclesTop(largeur, hauteur) {
         let obstaclesTop = [];
         let currentX = largeur;
-        const numObstacles = Math.ceil(this.intensity / 3);
+        const numObstacles = 5;
         
         for (let i = 0; i < numObstacles; i++) {
             const x = currentX;
@@ -31,7 +29,7 @@ class Level {
         let obstaclesBottom = [];
         let currentX = largeur;
         
-        const numObstacles = Math.ceil(this.intensity / 3);
+        const numObstacles = 5;
         
         for (let i = 0; i < numObstacles; i++) {
             const x = currentX;

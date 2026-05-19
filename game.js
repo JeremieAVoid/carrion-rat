@@ -9,9 +9,10 @@ class Game {
         this.bgImg.src = "images/horror_level.png";
  
         this.ratFrames = [];
-        this.obstacleTopImgs = [];
-        this.obstacleBottomImgs = [];
+        this.obstacleImgs = [];
+        this.obstacleImgsHeaven = [];
  
+        this.heaven = false;
         this.currentFrame = 0;
         this.frameTimer = 0;
         this.frameInterval = 40;
@@ -48,36 +49,39 @@ class Game {
     }
  
     async loadAssets() {
-        const topSrc = [
-            "images/obstacles_top_evil.png",
-            "images/obstacles_top_evil_1.png",
-            "images/obstacles_top_evil_2.png"
-        ];
-        const bottomSrc = [
+        const srcNormal = [
             "images/obstacles_bottom_evil.png",
             "images/obstacles_bottom_evil_1.png",
             "images/obstacles_bottom_evil_2.png"
+        ];
+        const srcHeaven = [
+            "images/pillarHeaven1.png",
+            "images/pillarHeaven2.png",
+            "images/pillarHeaven3.png"
         ];
         const ratSrc = [
             "images/rat_evil.png",
             "images/rat_evil_1.png",
             "images/rat_evil_2.png"
         ];
- 
+
         const promises = [];
         promises.push(this.loadImage(this.bgImg.src).then(img => { this.bgImg = img; }));
- 
-        for (const src of topSrc) {
-            promises.push(this.loadImage(src).then(img => this.obstacleTopImgs.push(img)));
+
+        this.obstacleImgs = [];
+        this.obstacleImgsHeaven = [];
+        this.ratFrames = [];
+
+        for (const chemin of srcNormal) {
+            promises.push(this.loadImage(chemin).then(img => this.obstacleImgs.push(img)));
         }
- 
-        for (const src of bottomSrc) {
-            promises.push(this.loadImage(src).then(img => this.obstacleBottomImgs.push(img)));
+        for (const chemin of srcHeaven) {
+            promises.push(this.loadImage(chemin).then(img => this.obstacleImgsHeaven.push(img)));
         }
-        for (const src of ratSrc) {
-            promises.push(this.loadImage(src).then(img => this.ratFrames.push(img)));
+        for (const chemin of ratSrc) {
+            promises.push(this.loadImage(chemin).then(img => this.ratFrames.push(img)));
         }
- 
+
         await Promise.all(promises);
     }
  
@@ -91,7 +95,7 @@ class Game {
 
         this.currentLev = new Level(difficulty);
         
-        this.player = new Rat(100, this.canvas.height / 2, 100, 150);
+        this.player = new Rat(100, this.canvas.height / 2, 75, 112);
         this.obstaclesBottom = this.currentLev.obstaclesBottom(this.canvas.width, this.canvas.height);
         this.obstaclesTop = this.currentLev.obstaclesTop(this.canvas.width, this.canvas.height);
         this.gameOver = false;
@@ -298,7 +302,7 @@ class Game {
     }
  
     draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); 
         this.ctx.drawImage(this.bgImg, 0, 0, this.canvas.width, this.canvas.height);
  
         this.ctx.save();
@@ -318,13 +322,13 @@ class Game {
         this.ctx.fillRect(0, this.canvas.height - 20, this.canvas.width, 20);
         this.ctx.fillRect(0, 0, this.canvas.width, 20);
 
-    if (!this.gameOver) {
-        this.frameTimer++;
-        if (this.frameTimer >= this.frameInterval) {
-            this.currentFrame = (this.currentFrame + 1) % this.ratFrames.length;
-            this.frameTimer = 0;
+        if (!this.gameOver) {
+            this.frameTimer++;
+            if (this.frameTimer >= this.frameInterval) {
+                this.currentFrame = (this.currentFrame + 1) % this.ratFrames.length;
+                this.frameTimer = 0;
+            }
         }
-    }
 
         this.ctx.drawImage(
             this.ratFrames[this.currentFrame],
@@ -333,20 +337,36 @@ class Game {
             this.player.getWidth(),
             this.player.getHeight()
         );
- 
-        for (const obstacle of this.obstaclesTop) {
-            this.ctx.drawImage(
-                this.obstacleTopImgs[obstacle.imgIndex],
-                obstacle.getPosX(),
-                obstacle.getPosY(),
-                obstacle.getWidth(),
-                obstacle.getHeight()
-            );
+        
+        let oBI = this.obstacleImgs;
+        if (this.heaven){
+            oBI = this.obstacleImgsHeaven;
         }
- 
+
+        for (const obstacle of this.obstaclesTop) {
+            this.ctx.save();
+            
+            const x = obstacle.getPosX();
+            const y = obstacle.getPosY();
+            const w = obstacle.getWidth();
+            const h = obstacle.getHeight();
+
+            this.ctx.translate(x, y);
+            this.ctx.scale(1, -1);
+            this.ctx.drawImage(
+                oBI[obstacle.imgIndex],
+                0,
+                -h,
+                w,
+                h
+            );
+            
+            this.ctx.restore();
+        }
+
         for (const obstacle of this.obstaclesBottom) {
             this.ctx.drawImage(
-                this.obstacleBottomImgs[obstacle.imgIndex],
+                oBI[obstacle.imgIndex],
                 obstacle.getPosX(),
                 obstacle.getPosY(),
                 obstacle.getWidth(),
@@ -369,24 +389,24 @@ class Game {
         this.ctx.textAlign = 'left';
         this.ctx.fillText(`Score : ${this.currentLev.score}`, 20, 40);
 
-    if (this.gameOver) {
-        this.ctx.fillStyle = 'rgba(77, 38, 22, 0.4)';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        if (this.gameOver) {
+            this.ctx.fillStyle = 'rgba(77, 38, 22, 0.4)';
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.ctx.fillStyle = '#a9301d97';
-        this.ctx.font = 'bold 70px "Courier New"';
-        this.ctx.textAlign = 'center';
-        this.ctx.fillText('☠ GAME OVER ☠', this.canvas.width / 2, this.canvas.height / 2 - 20);
+            this.ctx.fillStyle = '#a9301d97';
+            this.ctx.font = 'bold 70px "Courier New"';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText('☠ GAME OVER ☠', this.canvas.width / 2, this.canvas.height / 2 - 20);
 
-        this.ctx.fillStyle = '#ff2d2dca';
-        this.ctx.font = '28px "Courier New"';
-        this.ctx.fillText(`Score final : ${this.currentLev.score}`, this.canvas.width / 2, this.canvas.height / 2 + 50);
+            this.ctx.fillStyle = '#ff2d2dca';
+            this.ctx.font = '28px "Courier New"';
+            this.ctx.fillText(`Score final : ${this.currentLev.score}`, this.canvas.width / 2, this.canvas.height / 2 + 50);
 
-        this.ctx.fillStyle = '#888';
-        this.ctx.font = '18px "Courier New"';
-        this.ctx.fillText('[ ESPACE ] Recommencer', this.canvas.width / 2, this.canvas.height / 2 + 100);
-        this.ctx.fillText('[ M ] Menu principal', this.canvas.width / 2, this.canvas.height / 2 + 130);
-    }
+            this.ctx.fillStyle = '#888';
+            this.ctx.font = '18px "Courier New"';
+            this.ctx.fillText('[ ESPACE ] Recommencer', this.canvas.width / 2, this.canvas.height / 2 + 100);
+            this.ctx.fillText('[ M ] Menu principal', this.canvas.width / 2, this.canvas.height / 2 + 130);
+        }
     }
  
     attachControls() {
@@ -442,12 +462,11 @@ class Game {
         this.resizeCanvas();
         window.addEventListener('resize', () => this.resizeCanvas());
         this.attachControls();
-        await this.loadAssets();
- 
+
         const urlParams = new URLSearchParams(window.location.search);
         const action = urlParams.get('action');
         const niveau = urlParams.get('niveau');
- 
+
         if (action === 'reprendre') {
             const savedLevel = this.loadSavedLevel();
             if (savedLevel !== null) {
@@ -458,16 +477,26 @@ class Game {
             }
             return;
         }
- 
+
         let levelId = 4; 
         if (niveau) {
             if (!isNaN(niveau)) {
                 levelId = parseInt(niveau, 10);
             } else if (LEVELS_MAP[niveau]) {
                 levelId = LEVELS_MAP[niveau].id;
+                if (levelId < 4) {
+                    this.heaven = true;
+                    this.bgImg.src = "images/backgroundHeaven.png";
+                } else {
+                    this.heaven = false;
+                    this.bgImg.src = "images/backgroundHorror.png";
+                }
             }
         }
+        await this.loadAssets();
         this.startLevel(levelId);
+        const pageActuelle = window.location.pathname.split('/').pop(); 
+        window.history.replaceState({}, '', pageActuelle);
     }
  
     nextLevel(goToNext, levelNumber) {

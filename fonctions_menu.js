@@ -3,6 +3,7 @@ musicAccueil.play();
 
 function nouvellePartie() {
     window.location.href = 'jeu.html?niveau=classic1';
+    supprimer()
 }
 
 function reprendrePartie() {
